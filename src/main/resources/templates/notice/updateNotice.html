@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 公告的编辑页面 -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>编辑公告</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/css/login.css" media="all"/>
+</head>
+<body>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>编辑公告</legend>
+</fieldset>
+
+<form class="layui-form" action="" lay-filter="updateNotice">
+    <!--隐藏字段id，用于提供编辑需要的主键-->
+    <input type="hidden" name="id" id="id">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">公告标题</label>
+        <div class="layui-input-inline">
+            <input type="text" name="noticeTitle" lay-verify="required" autocomplete="off" placeholder="请输入标题" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">公告内容</label>
+        <div class="layui-input-block" style = "width:65%;">
+            <textarea placeholder="请输入内容" name="noticeContent" lay-verify="required" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">发布人</label>
+        <div class="layui-input-inline">
+            <input type="text" name="noticePublisher" autocomplete="off" readonly="readonly" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="update">立即提交</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script>
+    var laythis = layui.use(['form','layer','jquery'], function(){
+        var form = layui.form;
+        var layer = layui.layer;
+        var $ = layui.$;
+        var index = parent.layer.getFrameIndex(window.name);
+        //监听提交
+        form.on('submit(update)', function(data){
+            //获取要提交的数据
+            /*layer.alert(JSON.stringify(data.field), {
+            });*/
+            var field = data.field;
+            $.ajax({
+                type:"post"
+                ,url:'/notice/updateNotice'
+                ,data: JSON.stringify(field) //提交的数据，并转成json格式
+                ,contentType:"application/json"
+                ,dataType: "json"//返回的数据类型格式
+                ,success:function (resp) {
+                    if (resp.code){
+                        //向父页面传值
+                        parent.layer.msg(resp.msg,{icon:1,time: 1000});
+                        /*alert(resp.msg);*/
+                    }else {
+                        //向父页面传值
+                        parent.layer.msg(resp.msg,{icon:5,time: 1000});
+                       /* alert(resp.msg)*/
+                    }
+                    parent.layer.close(index);
+                }
+            });
+            return false;
+        });
+    });
+
+    //获取父页面传过来的参数 并查询出编辑的数据 给页面赋值
+    function child(obj){
+        /*alert(obj);*/
+        var noticeId = obj;
+        laythis.$.ajax({
+            url:'/notice/selectByIdNotice?id=' + noticeId
+            ,contentType:"application/json"
+            ,dataType: "json"//返回的数据类型格式
+            ,success:function(map){
+                if (map.code){
+                    var data = map.data;
+                    var noticePublisher = map.noticePublisher;
+                    //给表单赋值
+                    laythis.form.val("updateNotice", { //updateNotice 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+                        "id": data.id// "name": "value"
+                        ,"noticeTitle":data.noticeTitle
+                        ,"noticeContent": data.noticeContent
+                        ,"noticePublisher":noticePublisher
+                    });
+                }else {
+                    layer.msg(map.msg,{icon:5});
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

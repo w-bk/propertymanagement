@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 基本资料 -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>用户信息管理</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/css/login.css" media="all"/>
+</head>
+<body>
+    <div style="padding: 20px;" class="layui-main">
+        <div class="layui-row layui-col-space15" >
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">设置我的资料</div>
+                    <div class="layui-card-body" >
+                        <form class="layui-form" action="" lay-filter="example">
+                            <!--隐藏字段id，用于提供更新需要的主键-->
+                            <input type="hidden" name="id" id="id" th:value="${userInformation.id}"/>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户名</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="username" class="layui-input" th:value="${userInformation.userName}"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">性别</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="sex" value="男" title="男" th:checked="${userInformation.sex=='男'}"/>
+                                    <input type="radio" name="sex" value="女" title="女" th:checked="${userInformation.sex=='女'}"/>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">电话号码</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="userPhone" th:value="${userInformation.userPhone}" lay-verify="required|phone" class="layui-input"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">身份证号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="userCard" readonly="readonly" th:value="${userInformation.userCard}" lay-verify="required|identity"  placeholder="" autocomplete="off" class="layui-input"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">头像</label>
+                                <div class="layui-input-inline">
+                                    <div class="layui-upload">
+                                        <button type="button" class="layui-btn layui-upload-button" id="test1">上传头像</button>
+                                        <div class="layui-upload-list">
+                                            <img style="height:150px;width:150px;" class="layui-upload-img" th:src="${(userInformation.avatar != null && !#strings.isEmpty(userInformation.avatar)) ? '/upload/'+userInformation.avatar : '/images/face.jpg'}" id="demo1"/>
+                                            <p id="demoText"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">备注</label>
+                                <div class="layui-input-block">
+                                    <textarea name="remarks" class="layui-textarea" th:utext="${userInformation.remarks}"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit="" lay-filter="userInfo">确认修改</button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重新填写</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<!-- 头像上传 -->
+<script>
+    layui.use('upload', function(){
+        var $ = layui.jquery
+            ,upload = layui.upload;
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test1'
+            ,url: '/user/avatarUpload' //改成您自己的上传接口
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.code > 0){
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #4cae4c;">上传成功</span>');
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+    });
+</script>
+<!-- 表单操作 -->
+<script>
+    layui.use(['form','layer'], function(){
+        var form = layui.form
+            ,$ = layui.$
+            ,layer = layui.layer;
+
+        //监听提交
+        form.on('submit(userInfo)', function(data){
+            var filed = data.field;
+           /* layer.alert(JSON.stringify(filed), {
+                title: '最终的提交信息'
+            })*/
+            $.ajax({
+                type:"post"
+                ,url:'/user/updateUserInfo'
+                ,data: JSON.stringify(filed) //提交的数据，并转成json格式
+                ,contentType:"application/json"
+                ,dataType: "json"//返回的数据类型格式
+                ,success:function (map) {
+                    if (map.code){
+                        layer.msg(map.msg,{icon:1,time: 1000});
+                        location.reload();
+                    }else {
+                        layer.msg(map.msg,{icon:5,time: 1000});
+                        /*alert(map.msg);*/
+                      /*  location.reload();*/
+
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</html>

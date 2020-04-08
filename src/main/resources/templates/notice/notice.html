@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 前端公告显示 -->
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>公告列表</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/css/login.css" media="all"/>
+</head>
+<style>
+    .noticeTitle{float:left;}
+    .creationTime{float: left}
+    .noticePublisher{float: right}
+    .modificationTime{float: right}
+</style>
+<body >
+
+    <div style="padding: 20px;" class="layui-main">
+        <div class="layui-row layui-col-space15" th:each="noticeList : ${noticeList}" >
+            <div class="layui-col-md12" >
+                <div class="layui-card">
+                    <div class="layui-card-header" ><!--公告标题-->
+                        <span class="noticeTitle" th:text="'标题：'+${noticeList.noticeTitle}"></span>
+                        <!--发表人-->
+                        <span class="noticePublisher" th:text="'发表人：'+${noticeList.noticePublisher}"></span>
+                    </div>
+                    <div class="layui-card-body">
+                        <!--公告内容-->
+                        <span th:text="${noticeList.noticeContent}"></span>
+                    </div>
+                    <div class="layui-card-header"></div>
+                    <div class="layui-card-header">
+                        <div class="layui-card-body">
+                            <!--创建时间-->
+                            <span class="creationTime" th:text="'创建时间：'+${#dates.format(noticeList.creationTime,'yyyy-MM-dd')}"></span>
+                            <!--判断是否有修改时间 存在则显示-->
+                            <span class="modificationTime" th:if="${noticeList.modificationTime != null}">
+                               <span th:text="'修改时间：'+${#dates.format(noticeList.modificationTime,'yyyy-MM-dd')}"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

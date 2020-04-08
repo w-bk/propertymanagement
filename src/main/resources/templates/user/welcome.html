@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!-- 欢迎界面 -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>欢迎界面</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/css/login.css" media="all"/>
+</head>
+<body>
+    <div style="padding:20px;overflow:hidden; color:red; ">
+        <p style="font-size: 25px; line-height: 30px; height: 30px;">
+            <span th:text="'['+${session.userInformation.userName}+']'+'欢迎使用社区物业管理系统'"></span>
+        </p>
+
+        <hr />
+        <h2>系统环境</h2>
+        <p>系统环境：Windows</p>
+        <p>开发工具：IDEA</p>
+        <p>Java版本：JDK 1.8</p>
+        <p>数据库：MySQL 5.7</p>
+        <p>系统采用技术： springboot+mybaits-plus+Layui+Ajax</p>
+    </div>
+</body>
+
+</html>
