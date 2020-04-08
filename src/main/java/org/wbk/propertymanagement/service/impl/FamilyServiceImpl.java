@@ -1,6 +1,8 @@
 package org.wbk.propertymanagement.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wbk.propertymanagement.entity.Family;
 import org.wbk.propertymanagement.mapper.FamilyMapper;
@@ -60,5 +62,16 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
         delFamQueWer.eq(!"".equals(userCard) && userCard != null,"owner_card",userCard)
         .eq(!"".equals(buildingNumber) && buildingNumber != null,"building_number",buildingNumber);
         return familyMapper.delete(delFamQueWer);
+    }
+
+    /**
+     * @Description  查找业主对应的家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/8
+     **/
+    @Override
+    public IPage<Family> selectFamilyInfo(Integer page, Integer limit, String userCard) {
+        return familyMapper.selectPage(new Page<>(page,limit),new QueryWrapper<Family>()
+                .eq(!("").equals(userCard) && userCard != null,"owner_card",userCard));
     }
 }

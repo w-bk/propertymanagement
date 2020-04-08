@@ -65,12 +65,6 @@ public class Family implements Serializable {
     private String familyCard;
 
     /**
-     * 备注
-     */
-    @TableField("remarks")
-    private String remarks;
-
-    /**
      * 创建时间
      */
     @TableField("create_time")

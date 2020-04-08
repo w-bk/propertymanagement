@@ -1,5 +1,6 @@
 package org.wbk.propertymanagement.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.wbk.propertymanagement.entity.Family;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -33,4 +34,11 @@ public interface IFamilyService extends IService<Family> {
      * @Date 2020/4/1
      **/
     int deletFamily(String userCard,String buildingNumber);
+
+    /**
+     * @Description  查找业主对应的家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/8
+     **/
+    IPage<Family> selectFamilyInfo(Integer page, Integer limit, String userCard);
 }

@@ -200,7 +200,7 @@ public class PageController {
      * @Author 王宝凯
      * @Date 2020/4/3
      **/
-    @GetMapping("/family")
+    @GetMapping("/familyInfo")
     public String familyIfo(){
         return "family/familyInfo";
     }
