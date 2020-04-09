@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wbk.propertymanagement.entity.Family;
 import org.wbk.propertymanagement.mapper.FamilyMapper;
+import org.wbk.propertymanagement.response.ServerResponse;
 import org.wbk.propertymanagement.service.IFamilyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -85,5 +86,19 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
         return familyMapper.selectPage(new Page<>(page,limit),new QueryWrapper<Family>()
                 .eq(!("").equals(ownerCard) && ownerCard != null,"owner_card",ownerCard)
                 .orderByDesc("owner_card"));
+    }
+
+    /**
+     * @Description 删除家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    @Override
+    public ServerResponse deleteFamily(Integer id) {
+        int delNum = familyMapper.deleteById(id);
+        if (delNum != 1){
+            return ServerResponse.sendError("删除失败！");
+        }
+        return ServerResponse.sendSuccess("删除成功！");
     }
 }

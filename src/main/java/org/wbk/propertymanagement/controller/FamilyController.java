@@ -61,4 +61,15 @@ public class FamilyController {
         return map;
     }
 
+    /**
+     * @Description 删除家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    @GetMapping(value = "/deleteFamily")
+    @ResponseBody
+    public ServerResponse deleteFamily(@RequestParam Integer id){
+        return iFamilyService.deleteFamily(id);
+    }
+
 }

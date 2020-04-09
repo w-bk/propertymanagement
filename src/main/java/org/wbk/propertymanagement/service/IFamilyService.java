@@ -3,6 +3,7 @@ package org.wbk.propertymanagement.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.wbk.propertymanagement.entity.Family;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.wbk.propertymanagement.response.ServerResponse;
 
 /**
  * <p>
@@ -48,4 +49,11 @@ public interface IFamilyService extends IService<Family> {
      * @Date 2020/4/8
      **/
     IPage<Family> familyList(Integer page, Integer limit, String ownerCard);
+
+    /**
+     * @Description 删除家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    ServerResponse deleteFamily(Integer id);
 }

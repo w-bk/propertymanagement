@@ -11,7 +11,7 @@
 </head>
 
 <body>
-<div class="demoTable" style="padding: 20px;">
+<div class="demoTable layui-form" style="padding: 20px;">
     搜索家人信息：
     <div class="layui-inline">
         <input class="layui-input" placeholder="输入业主身份证号" lay-verify="identity" id="ownerCard" autocomplete="off">
@@ -71,11 +71,11 @@
                         /*obj.del(); //删除对应行（tr）的DOM结构，并更新缓存*/
                         //向服务端发送删除指令
                         $.ajax({
-                            url:'/notice/deleteNotice?id=' + data.id,
+                            url:'/family/deleteFamily?id=' + data.id,
                             contentType:"application/json",
                             dataType: "json",//返回的数据类型格式
                             success:function(resp){
-                                if (resp.code){
+                                if (resp.success){
                                     layer.close(index);
                                     layer.msg(resp.msg,{icon:1,time: 1000});
                                     table.reload('familyReload', {
@@ -91,7 +91,7 @@
                     });
                     break;
                 case 'edit':
-                    var index = layer.open({
+                    layer.open({
                         type: 2,
                         title: '编辑页面',
                         fixed: false, //不固定
