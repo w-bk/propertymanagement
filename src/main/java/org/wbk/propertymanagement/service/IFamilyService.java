@@ -56,4 +56,18 @@ public interface IFamilyService extends IService<Family> {
      * @Date 2020/4/9
      **/
     ServerResponse deleteFamily(Integer id);
+
+    /**
+     * @Description 根据家人表的id查询家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    ServerResponse selectByIdFamily(Integer id);
+
+    /**
+     * @Description 根据家人表的id修改家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    ServerResponse reviseFamilyInfo(Family familyInfo);
 }

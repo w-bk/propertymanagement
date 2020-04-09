@@ -101,4 +101,35 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
         }
         return ServerResponse.sendSuccess("删除成功！");
     }
+
+    /**
+     * @Description 根据家人表的id查询家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    @Override
+    public ServerResponse selectByIdFamily(Integer id) {
+        Family familyInfo = familyMapper.selectById(id);
+        if (familyInfo == null){
+            return ServerResponse.sendError("查询失败！");
+        }
+        return ServerResponse.sendSuccess(familyInfo);
+    }
+
+    /**
+     * @Description 根据家人表的id修改家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    @Override
+    public ServerResponse reviseFamilyInfo(Family familyInfo) {
+        if (familyInfo == null){
+            return ServerResponse.sendError("家人信息为空！");
+        }
+        int reviseNum = familyMapper.updateById(familyInfo);
+        if (reviseNum != 1){
+            return ServerResponse.sendError("修改失败！");
+        }
+        return ServerResponse.sendSuccess("修改成功！");
+    }
 }

@@ -72,4 +72,27 @@ public class FamilyController {
         return iFamilyService.deleteFamily(id);
     }
 
+    /**
+     * @Description 根据家人表的id查询家人信息 实现页面回显
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    @GetMapping(value = "/selectByIdFamily")
+    @ResponseBody
+    public ServerResponse selectByIdFamily(@RequestParam Integer id){
+        return iFamilyService.selectByIdFamily(id);
+    }
+
+    /**
+     * @Description 根据家人表的id更新家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    @PostMapping(value = "/reviseFamilyInfo")
+    @ResponseBody
+    public ServerResponse reviseFamilyInfo(@RequestBody Family familyInfo){
+        return iFamilyService.reviseFamilyInfo(familyInfo);
+    }
+
+
 }
