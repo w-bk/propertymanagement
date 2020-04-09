@@ -51,23 +51,69 @@
                         </dd>
                     </dl>
                 </li>
+
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><span>房屋系统</span></a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="javascript:;" kit-target data-options="{url:'/noticePageList',icon:'&#xe770;',title:'房屋管理',id:'3'}">
+                                <i class="layui-icon">&#xe770;</i><span>房屋管理</span></a>
+                        </dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><span>家人管理</span></a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="javascript:;" kit-target data-options="{url:'/familyList',icon:'&#xe770;',title:'家人信息',id:'4'}">
+                                <i class="layui-icon">&#xe770;</i><span>家人信息</span></a>
+                        </dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><span>缴费系统</span></a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="javascript:;" kit-target data-options="{url:'/noticePageList',icon:'&#xe663;;',title:'缴费类型',id:'5'}">
+                                <i class="layui-icon">&#xe663;</i><span>缴费类型</span></a>
+                        </dd>
+                        <dd>
+                            <a href="javascript:;" kit-target data-options="{url:'/noticePageList',icon:'&#xe663;;',title:'缴费管理',id:'6'}">
+                                <i class="layui-icon">&#xe663;</i><span>缴费管理</span></a>
+                        </dd>
+                    </dl>
+                </li>
+
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><span>维修系统</span></a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="javascript:;" kit-target data-options="{url:'/noticePageList',icon:'&#xe653;',title:'维修管理',id:'7'}">
+                                <i class="layui-icon">&#xe653;</i><span>维修管理</span></a>
+                        </dd>
+                    </dl>
+                </li>
+
+
                 <li class="layui-nav-item">
                     <a href="javascript:;"><span>用户管理</span></a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;" kit-target data-options="{url:'/adminList',icon:'&#xe770;',title:'管理员信息',id:'3'}">
+                            <a href="javascript:;" kit-target data-options="{url:'/adminList',icon:'&#xe770;',title:'管理员信息',id:'8'}">
                                 <i class="layui-icon">&#xe770;</i><span>管理员信息</span></a>
                         </dd>
                     </dl>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;" kit-target data-options="{url:'/ownerList',icon:'&#xe770;',title:'业主信息',id:'4'}">
+                            <a href="javascript:;" kit-target data-options="{url:'/ownerList',icon:'&#xe770;',title:'业主信息',id:'9'}">
                                 <i class="layui-icon">&#xe770;</i><span>业主信息</span></a>
                         </dd>
                     </dl>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;" kit-target data-options="{url:'/tenantList',icon:'&#xe770;',title:'租户信息',id:'5'}">
+                            <a href="javascript:;" kit-target data-options="{url:'/tenantList',icon:'&#xe770;',title:'租户信息',id:'10'}">
                                 <i class="layui-icon">&#xe770;</i><span>租户信息</span></a>
                         </dd>
                     </dl>
@@ -76,11 +122,11 @@
                     <a href="javascript:;"><span>我的设置</span></a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;" kit-target data-options="{url:'/user/userInforMation',icon:'&#xe770;',title:'修改信息',id:'6'}">
+                            <a href="javascript:;" kit-target data-options="{url:'/user/userInforMation',icon:'&#xe770;',title:'修改信息',id:'11'}">
                                 <i class="layui-icon">&#xe770;</i><span>修改信息</span></a>
                         </dd>
                         <dd>
-                            <a href="javascript:;" kit-target data-options="{url:'/ChangePassword',icon:'&#xe673;',title:'修改密码',id:'4'}">
+                            <a href="javascript:;" kit-target data-options="{url:'/ChangePassword',icon:'&#xe673;',title:'修改密码',id:'12'}">
                                 <i class="layui-icon">&#xe673;</i><span>修改密码</span></a>
                         </dd>
                     </dl>
@@ -120,7 +166,7 @@
         $('#info').on('click',function () {
             tab.tabAdd({
                 icon: "",
-                id: "6",
+                id: "11",
                 title: "修改信息",
                 url: "/user/userInforMation"
             });

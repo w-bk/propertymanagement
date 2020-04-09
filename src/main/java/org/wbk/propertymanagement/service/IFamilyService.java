@@ -41,4 +41,11 @@ public interface IFamilyService extends IService<Family> {
      * @Date 2020/4/8
      **/
     IPage<Family> selectFamilyInfo(Integer page, Integer limit, String userCard);
+
+    /**
+     * @Description  查看家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/8
+     **/
+    IPage<Family> familyList(Integer page, Integer limit, String ownerCard);
 }

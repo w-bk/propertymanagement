@@ -196,13 +196,23 @@ public class PageController {
     }
 
     /**
-     * @Description 后端家人信息表
+     * @Description 业主对应的家人信息界面
      * @Author 王宝凯
      * @Date 2020/4/3
      **/
     @GetMapping("/familyInfo")
-    public String familyIfo(){
-        return "family/familyInfo";
+    public String familyInfo(){
+        return "owner/familyInfo";
+    }
+
+    /**
+     * @Description 后端家人信息表
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    @GetMapping("/familyList")
+    public String familyList(){
+        return "family/familyList";
     }
 
 }

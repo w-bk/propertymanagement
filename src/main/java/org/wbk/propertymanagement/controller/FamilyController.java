@@ -28,7 +28,7 @@ public class FamilyController {
     private IFamilyService iFamilyService;
 
     /**
-     * @Description  查找业主对应的家人信息
+     * @Description  查找业主对应的家人信息   查看家人信息
      * @Author 王宝凯
      * @Date 2020/4/8
      **/
@@ -41,6 +41,23 @@ public class FamilyController {
         map.put("msg","");
         map.put("count",familyInfo.getTotal());//总条数
         map.put("data",familyInfo.getRecords());//返回的数据
+        return map;
+    }
+
+    /**
+     * @Description  查看家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/8
+     **/
+    @GetMapping(value = "/familyList")
+    @ResponseBody
+    public Map familyList(Integer page,Integer limit,String ownerCard){
+        Map<String,Object> map = new HashMap<>();
+        IPage<Family> familyList = iFamilyService.familyList(page,limit,ownerCard);
+        map.put("code",0);
+        map.put("msg","");
+        map.put("count",familyList.getTotal());//总条数
+        map.put("data",familyList.getRecords());//返回的数据
         return map;
     }
 

@@ -74,4 +74,16 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
         return familyMapper.selectPage(new Page<>(page,limit),new QueryWrapper<Family>()
                 .eq(!("").equals(userCard) && userCard != null,"owner_card",userCard));
     }
+
+    /**
+     * @Description  查看家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/8
+     **/
+    @Override
+    public IPage<Family> familyList(Integer page, Integer limit, String ownerCard) {
+        return familyMapper.selectPage(new Page<>(page,limit),new QueryWrapper<Family>()
+                .eq(!("").equals(ownerCard) && ownerCard != null,"owner_card",ownerCard)
+                .orderByDesc("owner_card"));
+    }
 }
