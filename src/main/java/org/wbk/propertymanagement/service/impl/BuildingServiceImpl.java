@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wbk.propertymanagement.entity.Building;
+import org.wbk.propertymanagement.entity.Family;
 import org.wbk.propertymanagement.mapper.BuildingMapper;
+import org.wbk.propertymanagement.response.ServerResponse;
 import org.wbk.propertymanagement.service.IBuildingService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -112,5 +114,19 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingMapper, Building> i
                 .orderByDesc("update_time")
                 .eq("idel",0);
         return buildingMapper.selectPage(new Page<>(page,limit),buildQueWer);
+    }
+
+    /**
+     * @Description 查询楼房表中的业主信息  用来显示楼房号
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    @Override
+    public ServerResponse selectBuildNumber() {
+        List<Building> selectList = buildingMapper.selectList(new QueryWrapper<Building>().eq("building_info","自住"));
+        if (selectList.isEmpty()){
+            return ServerResponse.sendError("找不到数据！");
+        }
+        return ServerResponse.sendSuccess(selectList);
     }
 }

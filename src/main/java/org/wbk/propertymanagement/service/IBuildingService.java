@@ -3,6 +3,7 @@ package org.wbk.propertymanagement.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.wbk.propertymanagement.entity.Building;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.wbk.propertymanagement.response.ServerResponse;
 
 import java.util.List;
 
@@ -65,4 +66,10 @@ public interface IBuildingService extends IService<Building> {
      **/
     IPage<Building> buildInfo(Integer page, Integer limit, String userCard);
 
+    /**
+     * @Description 查询楼房表中的业主信息  用来显示楼房号
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    ServerResponse selectBuildNumber();
 }

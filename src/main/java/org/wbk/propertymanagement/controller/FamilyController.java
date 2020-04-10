@@ -1,6 +1,7 @@
 package org.wbk.propertymanagement.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.wbk.propertymanagement.response.ServerResponse;
 import org.wbk.propertymanagement.service.IFamilyService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -94,5 +96,15 @@ public class FamilyController {
         return iFamilyService.reviseFamilyInfo(familyInfo);
     }
 
+    /**
+     * @Description 添加家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    @PostMapping(value = "/addFamilyList")
+    @ResponseBody
+    public ServerResponse addFamilyList(@RequestBody Family familyList){
+        return iFamilyService.addFamilyList(familyList);
+    }
 
 }

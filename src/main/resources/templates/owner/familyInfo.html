@@ -25,10 +25,9 @@
     //获取父页面传过来的参数 并查询数据
     function familyInfo(userCard){
         var userCard = userCard;
-        layui.use(['table','form','layer','jquery'], function(){
+        layui.use(['table','form','jquery'], function(){
             var form = layui.form;
             var table = layui.table;
-            var layer = layui.layer;
             var $ = layui.$;
             table.render({
                 elem: '#familyInfo'

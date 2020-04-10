@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wbk.propertymanagement.entity.Building;
 import org.wbk.propertymanagement.entity.Family;
+import org.wbk.propertymanagement.mapper.BuildingMapper;
 import org.wbk.propertymanagement.mapper.FamilyMapper;
 import org.wbk.propertymanagement.response.ServerResponse;
 import org.wbk.propertymanagement.service.IFamilyService;
@@ -12,6 +14,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -25,6 +28,8 @@ import java.util.Date;
 public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> implements IFamilyService {
     @Autowired
     private FamilyMapper familyMapper;
+    @Autowired
+    private BuildingMapper buildingMapper;
 
     /**
      * @Description 更新业主对应家人表的楼房号
@@ -43,13 +48,15 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
     }
 
     /**
-     * @Description 添加业主到对应的家人表中
+     * @Description 根据业主的身份证号和楼房号 查询是否存在楼房信息
      * @Author 王宝凯
-     * @Date 2020/4/3
+     * @Date 2020/4/1
      **/
     @Override
-    public int addFamilyInfo(Family familyInfo) {
-        return familyMapper.insert(familyInfo);
+    public List<Family> selectFamilyList(String userCard, String buildingNumber) {
+        return familyMapper.selectList(new QueryWrapper<Family>()
+                .eq(!("").equals(userCard) && userCard !=null,"owner_card",userCard)
+                .eq(!("").equals(buildingNumber) && buildingNumber !=null,"building_number",buildingNumber));
     }
 
     /**
@@ -131,5 +138,29 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
             return ServerResponse.sendError("修改失败！");
         }
         return ServerResponse.sendSuccess("修改成功！");
+    }
+
+    /**
+     * @Description 添加家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    @Override
+    public ServerResponse addFamilyList(Family familyList) {
+        if (familyList == null){
+            return ServerResponse.sendError();
+        }
+        Building building = buildingMapper.selectById(familyList.getBuildingNumber());
+        if (building == null){
+            return ServerResponse.sendError();
+        }
+        familyList.setBuildingNumber(building.getBuildingNumber());
+        familyList.setUpdateTime(new Date());
+        familyList.setCreateTime(new Date());
+        int insert = familyMapper.insert(familyList);
+        if (insert != 1){
+            return ServerResponse.sendError("添加失败！");
+        }
+        return ServerResponse.sendSuccess("添加成功！");
     }
 }

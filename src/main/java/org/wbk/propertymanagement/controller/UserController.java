@@ -259,15 +259,17 @@ public class UserController extends BaseController{
         User userInfo = iUserService.userInforMation(id);
         //根据用户的身份证号和手机号 查询楼房信息
         Building buildInfo = iBuildingService.selectBuildInfo(userInfo.getUserCard(),userInfo.getUserPhone());
+        //根据业主户的身份证号和楼房号 查询家人信息
+        List<Family> familyList = iFamilyService.selectFamilyList(userInfo.getUserCard(),buildInfo.getBuildingNumber());
         int deletFamNum =0;
-        if (userInfo.getStatus() == 1){
+        if (userInfo.getStatus() == 1 && !familyList.isEmpty()){
             //删除业主对应的家人表中的信息
             deletFamNum = iFamilyService.deletFamily(userInfo.getUserCard(),buildInfo.getBuildingNumber());
         }
         //删除用户操作 修改房屋的状态
         int buildSta = iBuildingService.updateBuildSta(buildInfo);
         int deleteUserNumber = iUserService.deleteUser(id);
-        if (userInfo.getStatus() == 1){
+        if (userInfo.getStatus() == 1 && !familyList.isEmpty()){
             if (deletFamNum > 0 && buildSta > 0 && deleteUserNumber > 0){
                 map.put("code",true);
                 map.put("msg","删除成功！");
@@ -416,8 +418,6 @@ public class UserController extends BaseController{
         String buildingId = userInfo.getBuildingNumber();
         //根据楼房表的id获取楼房信息
         Building buildInfo = iBuildingService.selectByIdBuildInfo(buildingId);
-        //获取楼层号
-        String buildingNumber = buildInfo.getBuildingNumber();
         userInfo.setCreateTime(new Date());
         userInfo.setUpdateTime(new Date());
         //获取日期范围
@@ -431,7 +431,6 @@ public class UserController extends BaseController{
                 dueTime = strsplit[1];
             }
         }
-        int addFamilyNum = 0;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if (userInfo.getStatus() == 0){
             buildInfo.setBuildingInfo("管理员");
@@ -441,16 +440,6 @@ public class UserController extends BaseController{
             buildInfo.setBuildingInfo("自住");
             buildInfo.setLeaseTime(sdf.format(new Date()));
             buildInfo.setDueTime(null);
-            //获取业主的身份证号
-            //给家人表赋值
-            String ownerCard = userInfo.getUserCard();
-            Family familyInfo = new Family();
-            familyInfo.setOwnerCard(ownerCard);
-            familyInfo.setBuildingNumber(buildingNumber);
-            familyInfo.setCreateTime(new Date());
-            familyInfo.setUpdateTime(new Date());
-            //添加业主对应家人表的楼房号
-            addFamilyNum = iFamilyService.addFamilyInfo(familyInfo);
         }else if (userInfo.getStatus() == 2){
             buildInfo.setBuildingInfo("出租");
             buildInfo.setLeaseTime(leaseTime);
@@ -464,22 +453,12 @@ public class UserController extends BaseController{
         int editBuildNum = iBuildingService.editBuildInfo(buildInfo);
         //往用户表中添加信息
         int addUserNum = iUserService.addUserInfo(userInfo);
-        if (userInfo.getStatus() == 1){
-            if(addFamilyNum > 0 && editBuildNum >0 && addUserNum >0){
-                map.put("code",true);
-                map.put("msg","添加成功！");
-            }else {
-                map.put("code",false);
-                map.put("msg","添加失败！");
-            }
+        if(editBuildNum >0 && addUserNum >0){
+            map.put("code",true);
+            map.put("msg","添加成功！");
         }else {
-            if(editBuildNum >0 && addUserNum >0){
-                map.put("code",true);
-                map.put("msg","添加成功！");
-            }else {
-                map.put("code",false);
-                map.put("msg","添加失败！");
-            }
+            map.put("code",false);
+            map.put("msg","添加失败！");
         }
         return map;
     }

@@ -5,6 +5,8 @@ import org.wbk.propertymanagement.entity.Family;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.wbk.propertymanagement.response.ServerResponse;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -23,11 +25,11 @@ public interface IFamilyService extends IService<Family> {
     int editFamilyInfo(String ownerCard, String buildingNumber);
 
     /**
-     * @Description 添加业主到对应的家人表中
+     * @Description 根据业主的身份证号和楼房号 查询是否存在楼房信息
      * @Author 王宝凯
-     * @Date 2020/4/3
+     * @Date 2020/4/1
      **/
-    int addFamilyInfo(Family familyInfo);
+    List<Family> selectFamilyList(String userCard, String buildingNumber);
 
     /**
      * @Description 根据业主的身份证号和楼房号 删除信息
@@ -70,4 +72,12 @@ public interface IFamilyService extends IService<Family> {
      * @Date 2020/4/9
      **/
     ServerResponse reviseFamilyInfo(Family familyInfo);
+
+    /**
+     * @Description 添加家人信息
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    ServerResponse addFamilyList(Family familyList);
+
 }

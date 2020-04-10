@@ -225,4 +225,14 @@ public class PageController {
         return "family/editFamilyInfo";
     }
 
+    /**
+     * @Description 后端家人信息的添加页面
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    @GetMapping("/addFamilyInfo")
+    public String addFamilyInfo(){
+        return "family/addFamilyInfo";
+    }
+
 }

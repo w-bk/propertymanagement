@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import org.wbk.propertymanagement.entity.Building;
+import org.wbk.propertymanagement.response.ServerResponse;
 import org.wbk.propertymanagement.service.IBuildingService;
 
 import java.util.HashMap;
@@ -63,6 +64,32 @@ public class BuildingController {
         map.put("count",buildInfo.getTotal());//总条数
         map.put("data",buildInfo.getRecords());//返回的数据
         return map;
+    }
+
+    /**
+     * @Description 根据前端传过来的楼层表的id查询楼层号
+     * @Author 王宝凯
+     * @Date 2020/4/1
+     **/
+    @GetMapping(value = "/selectByIdBuildInfo")
+    @ResponseBody
+    public ServerResponse selectByIdBuildInfo(@RequestParam String buildingId){
+        Building buildingInfo = iBuildingService.selectByIdBuildInfo(buildingId);
+        if (buildingInfo == null){
+            return ServerResponse.sendError("找不到数据！");
+        }
+        return ServerResponse.sendSuccess(buildingInfo);
+    };
+
+    /**
+     * @Description 查询楼房表中的业主信息  用来显示楼房号
+     * @Author 王宝凯
+     * @Date 2020/4/9
+     **/
+    @GetMapping(value = "/selectBuildNumber")
+    @ResponseBody
+    public ServerResponse selectBuildNumber(){
+        return iBuildingService.selectBuildNumber();
     }
 
 }

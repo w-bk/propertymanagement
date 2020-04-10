@@ -1,23 +1,38 @@
 <!DOCTYPE html>
-<!-- 家人信息的编辑页面 -->
+<!-- 家人信息的添加页面 -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
-    <title>编辑家人信息</title>
+    <title>添加家人信息</title>
     <link rel="stylesheet" href="/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" href="/css/login.css" media="all"/>
 </head>
 <body>
 
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-    <legend>编辑家人信息</legend>
+    <legend>添加家人信息</legend>
 </fieldset>
 
-<form class="layui-form" action="" lay-filter="reviseFamilyInfo">
-    <!--隐藏字段id，用于提供更新需要的主键-->
-    <input type="hidden" name="id" id="id"/>
+<form class="layui-form" action="" lay-filter="addFamilyInfo" style="white-space:nowrap;">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">楼房号</label>
+        <div class="layui-input-inline">
+            <select id="select" name="buildingNumber" lay-filter="buildingNumber">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">业主身份证号</label>
+        <div class="layui-input-inline">
+            <input type="text" name="ownerCard" readonly="readonly" lay-verify="required|identity" class="layui-input"/>
+        </div>
+    </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label">家人姓名</label>
         <div class="layui-input-inline">
@@ -25,47 +40,47 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">性别</label>
+        <label class="layui-form-label">家人性别</label>
         <div class="layui-input-block">
             <input type="radio" name="familySex" value="男" title="男">
             <input type="radio" name="familySex" value="女" title="女">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">电话号码</label>
+        <label class="layui-form-label">家人电话号码</label>
         <div class="layui-input-inline">
             <input type="text" name="familyPhone" lay-verify="required|phone" class="layui-input"/>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">身份证号</label>
+        <label class="layui-form-label">家人身份证号</label>
         <div class="layui-input-inline">
             <input type="text" name="familyCard" lay-verify="required|identity" class="layui-input"/>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button type="submit" class="layui-btn" lay-submit="" lay-filter="familyInfo">确认修改</button>
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="addFamilyInfo">确认修改</button>
         </div>
     </div>
 </form>
 
 <script type="text/javascript" src="/layui/layui.js"></script>
 <script>
-    var laythis = layui.use(['form','layer','jquery'], function(){
+    layui.use(['form','layer','jquery'], function(){
         var form = layui.form;
         var layer = layui.layer;
         var $ = layui.$;
         var index = parent.layer.getFrameIndex(window.name);
         //监听提交
-        form.on('submit(familyInfo)', function(data){
+        form.on('submit(addFamilyInfo)', function(data){
             //获取要提交的数据
             /*layer.alert(JSON.stringify(data.field), {
             });*/
             var field = data.field;
             $.ajax({
                 type:"POST"
-                ,url:'/family/reviseFamilyInfo'
+                ,url:'/family/addFamilyList'
                 ,data: JSON.stringify(field) //提交的数据，并转成json格式
                 ,contentType:"application/json"
                 ,dataType: "json"//返回的数据类型格式
@@ -78,7 +93,6 @@
                     }else {
                         //向父页面传值
                         parent.layer.msg(map.msg,{icon:5,time: 1000});
-
                     }
                 }
             });
@@ -88,35 +102,45 @@
         form.verify({
             identity:[/(^$)|(^\d{15}$)|(^\d{17}(x|X|\d)$)/,'请输入正确的身份证号']
         });
-    });
-
-    //获取父页面传过来的参数 并查询出编辑的数据 给页面赋值
-    function editFamilyInfo(obj){
-        /*alert(obj);*/
-        var familyId = obj;
-        //laythis为了引用js
-        laythis.$.ajax({
-            url:'/family/selectByIdFamily?id=' + familyId
-            ,contentType:"application/json"
-            ,dataType: "json"//返回的数据类型格式
-            ,success:function(map){
-                if (map.success){
+        //赋值
+        $.ajax({
+            url: '/building/selectBuildNumber'
+            , contentType: "application/json"
+            , dataType: "json"//返回的数据类型格式
+            , success: function (map) {
+                if (map.success) {
                     var data = map.data;
-                    /*console.log(data);*/
-                    //给表单赋值
-                    laythis.form.val("reviseFamilyInfo", { //editOperation 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
-                        "id": data.id // "name": "value"
-                        ,"familyName":data.familyName
-                        ,"familySex":data.familySex
-                        ,"familyPhone":data.familyPhone
-                        ,"familyCard":data.familyCard
-                    });
-                }else {
-                    layer.msg(map.msg,{icon:5});
+                    var length = data.length;
+                    //给下拉列表动态赋值
+                    for (var i = 0;i < length; i++){
+                        $("#select").append('<option value="' +data[i].id+'">' + data[i].buildingNumber +'</option>');
+                    }
+                    form.render('select');
+                } else {
+                    layer.msg(map.msg, {icon: 5});
                 }
             }
         });
-    }
+        //监听下拉选择框  自动赋值 业主身份证号码
+        form.on('select(buildingNumber)', function(data){
+            $.ajax({
+                url:'/building/selectByIdBuildInfo?buildingId=' + data.value
+                , contentType: "application/json"
+                , dataType: "json"//返回的数据类型格式
+                , success: function (map) {
+                if (map.success) {
+                    var data = map.data;
+                    form.val("addFamilyInfo",{
+                        "ownerCard":data.userCard
+                    });
+                } else {
+                    layer.msg(map.msg, {icon: 5});
+                }
+                }
+            });
+            /*console.log(data.value); //得到被选中的值*/
+        });
+    });
 </script>
 
 </body>
