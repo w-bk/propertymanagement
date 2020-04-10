@@ -29,7 +29,7 @@
 <!--行工具按钮-->
 <script type="text/html" id="operate">
     <a lay-event="building" class="layui-btn layui-btn-xs">房屋信息</a>
-    <a lay-event="cost" class="layui-btn layui-btn-xs">缴费信息</a>
+    <a lay-event="cost" class="layui-btn layui-btn-xs">缴费管理</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" >删除</a>
 </script>
@@ -133,6 +133,32 @@
                         },
                         end:function () {
                             table.reload('tenantReload', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                            });
+                        }
+                    });
+                    break;
+                case 'cost':
+                    layer.open({
+                        type: 2,
+                        title: '缴费',
+                        fixed: false, //不固定
+                        /*area: ['65%', '80%'],*/
+                        skin: 'layui-layer-rim',//加上边框
+                        maxmin: true,//开启最大化最小化按钮
+                        shadeClose: true,//点击阴影处可关闭
+                        shade: 0.3,//背景灰度
+                        content:'buildInfo',//打开的弹出层名字
+                        success:function (layero,index) {
+                            // 向子页面传递参数
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            //传递用户的身份证号去查找用户的房屋信息进行显示
+                            iframeWin.buildInfo(data.userCard);
+                        },
+                        end:function () {
+                            table.reload('ownerReload', {
                                 page: {
                                     curr: 1 //重新从第 1 页开始
                                 }

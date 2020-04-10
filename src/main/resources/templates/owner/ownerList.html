@@ -30,7 +30,7 @@
 <script type="text/html" id="operate">
     <a lay-event="building" class="layui-btn layui-btn-xs">房屋信息</a>
     <a lay-event="family" class="layui-btn layui-btn-xs">家人信息</a>
-    <a lay-event="cost" class="layui-btn layui-btn-xs">缴费信息</a>
+    <a lay-event="cost" class="layui-btn layui-btn-xs">缴费管理</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" >删除</a>
 </script>
@@ -143,9 +143,9 @@
                 case 'cost':
                     layer.open({
                         type: 2,
-                        title: '房屋信息',
+                        title: '缴费',
                         fixed: false, //不固定
-                        area: ['65%', '80%'],
+                        /*area: ['65%', '80%'],*/
                         skin: 'layui-layer-rim',//加上边框
                         maxmin: true,//开启最大化最小化按钮
                         shadeClose: true,//点击阴影处可关闭
