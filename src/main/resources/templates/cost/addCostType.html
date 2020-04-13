@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>添加缴费类型</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/css/login.css" media="all"/>
+</head>
+<body>
+
+<form class="layui-form" style="padding: 20px;" action="" lay-filter="addCostType">
+    <div class="layui-form-item">
+        <label class="layui-form-label">缴费类型</label>
+        <div class="layui-input-inline">
+            <input type="text" name="costType" lay-verify="required" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="addCostType">确认修改</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script>
+    var laythis = layui.use(['form','layer','jquery'], function(){
+        var form = layui.form;
+        var layer = layui.layer;
+        var $ = layui.$;
+        var index = parent.layer.getFrameIndex(window.name);
+        //监听提交
+        form.on('submit(addCostType)', function(data){
+            //获取要提交的数据
+            /*layer.alert(JSON.stringify(data.field), {
+            });*/
+            var field = data.field;
+            $.ajax({
+                type:"POST"
+                ,url:'/cost/addCostType'
+                ,data: JSON.stringify(field) //提交的数据，并转成json格式
+                ,contentType:"application/json"
+                ,dataType: "json"//返回的数据类型格式
+                ,success:function (map) {
+                    if (map.success){
+                        //向父页面传值
+                        parent.layer.msg(map.msg,{icon:1,time: 1000});
+                        //关闭
+                        parent.layer.close(index);
+                    }else {
+                        //向父页面传值
+                        parent.layer.msg(map.msg,{icon:5,time: 1000});
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -42,7 +42,6 @@ public class NoticeController {
     public String noticeList(Model model){
         List<Notice> noticeList = iNoticeService.noticeList();
        /* System.out.println("noticeList测试1111111");*/
-
         if (noticeList.isEmpty()){
             model.addAttribute("noticeList",null);
            /* System.out.println("noticeList测试2222222");*/

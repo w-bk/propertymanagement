@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 缴费类型页面 -->
+<head>
+    <meta charset="UTF-8">
+    <title>缴费类型</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/login.css" media="all"/>
+</head>
+<body>
+<!-- 搜索和整体框架布局 -->
+<div class="demoTable layui-form" style="padding: 20px;">
+    搜索缴费类型：
+    <div class="layui-inline">
+        <input class="layui-input" placeholder="输入缴费类型" id="costType" autocomplete="off">
+    </div>
+    <button class="layui-btn icon-btn" data-type="reload" id="costTypeSearch">搜索</button>
+    <table class="layui-hide" id="costTypeList" lay-filter="costTypeList"></table>
+</div>
+<!--头部工具按钮-->
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">
+            <i class="layui-icon">&#xe608;</i> 添&emsp;加
+        </button>
+    </div>
+</script>
+<!--行工具按钮-->
+<script type="text/html" id="operate">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" >删除</a>
+</script>
+
+<script type="text/javascript" src="/layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['table', 'layer', 'form','jquery'], function(){
+        var form = layui.form;
+        var table = layui.table;
+        var layer = layui.layer;
+        table.render({
+            elem: '#costTypeList'
+            ,url: '/cost/costList' //数据接口
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,even: true //开启隔行背景
+            ,page: true //开启分页
+            ,cols: [
+                [
+                    {field:'number', title: '编号',type:'numbers',width: 60, align: 'center'}
+                    ,{field:'costType', title: '缴费类型',align: 'center'}
+                    ,{fixed: 'right', title:'操作', toolbar: '#operate',align: 'center'}
+                ]
+            ]
+            ,id:'costTypeReload'
+        });
+        //监听行工具事件
+        table.on('tool(costTypeList)', function(obj){ //costTypeList是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data;//获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            //console.log(obj)
+            switch (layEvent) {
+                case 'del':
+                    layer.confirm('真的删除这行吗？', function(index){
+                        //向服务端发送删除指令
+                        $.ajax({
+                            type:"post",
+                            url:'/cost/deleteCost',
+                            contentType:"application/json",
+                            data:JSON.stringify(data),//提交的数据，并转成json格式,
+                            dataType: "json",//返回的数据类型格式
+                            success:function(map){
+                                if (map.success){
+                                    layer.msg(map.msg,{icon:1,time: 1000});
+                                    table.reload('costTypeReload', {
+                                        page: {
+                                            curr: 1 //重新从第 1 页开始
+                                        }
+                                    });
+                                }else {
+                                    layer.msg(map.msg,{icon:5,time: 1000});
+                                }
+                            }
+                        });
+                    });
+                    break;
+            }
+        });
+        // 监听头部工具栏
+        table.on('toolbar(costTypeList)', function (obj) {
+            switch (obj.event) {
+                case 'add':
+                    layer.open({
+                        type: 2,
+                        title: '添加缴费类型',
+                        fixed: false, //不固定
+                        area: ['35%', '45%'],
+                        offset: '30px', //坐标
+                        skin: 'layui-layer-rim',//加上边框
+                        maxmin: true,//开启最大化最小化按钮
+                        shadeClose: true,//点击阴影处可关闭
+                        shade: 0.3,//背景灰度
+                        content:'addCostType',//打开的弹出层名字
+                        end:function () {
+                            table.reload('costTypeReload', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                            });
+                        }
+                    });
+                    break;
+            }
+        });
+        //数据表格的重载
+        var $ = layui.$, active = {
+            reload: function(){
+                var costType = $('#costType');
+                //执行重载
+                table.reload('costTypeReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    //根据条件进行查询
+                    ,where: {
+                        costType: costType.val()
+                    }
+                });
+            }
+        };
+        //点击搜索按钮根据公告标题进行模糊查询
+        $('#costTypeSearch').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+
+</script>
+
+</body>
+</html>

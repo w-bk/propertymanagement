@@ -20,7 +20,6 @@ public class PageController {
     public String login(){
         return "login";
     }
-
     /**
      * @Description 跳转后台页面
      * @Author 王宝凯
@@ -30,7 +29,6 @@ public class PageController {
     public String index(){
         return "index";
     }
-
     /**
      * @Description 跳转业主页面
      * @Author 王宝凯
@@ -40,7 +38,6 @@ public class PageController {
     public String houseowner(){
         return "owner";
     }
-
     /**
      * @Description 跳转租户页面
      * @Author 王宝凯
@@ -50,7 +47,6 @@ public class PageController {
     public String tenant(){
         return "tenant";
     }
-
     /**
      * @Description 界面
      * @Author 王宝凯
@@ -60,12 +56,10 @@ public class PageController {
     public String welcome(){
         return "user/welcome";
     }
-
     @GetMapping("/LayuiForm")
     public String LayuiForm(){
         return "LayuiForm";
     }
-
     /**
      * @Description 前端公告界面
      * @Author 王宝凯
@@ -75,7 +69,6 @@ public class PageController {
     public String notice(){
         return "notice/notice";
     }
-
     /**
      * @Description 空白前端公告界面
      * @Author 王宝凯
@@ -94,7 +87,6 @@ public class PageController {
     public String noticePageList(){
         return "notice/noticeList";
     }
-
     /**
      * @Description 用户基本资料
      * @Author 王宝凯
@@ -104,7 +96,6 @@ public class PageController {
     public String userInformation(){
         return "user/userInformation";
     }
-
     /**
      * @Description 公告的编辑页面
      * @Author 王宝凯
@@ -114,7 +105,6 @@ public class PageController {
     public String updateNotice(){
         return "notice/updateNotice";
     }
-
     /**
      * @Description 公告的添加页面
      * @Author 王宝凯
@@ -124,7 +114,6 @@ public class PageController {
     public String insertNotice(){
         return "notice/insertNotice";
     }
-
     /**
      * @Description 修改密码界面
      * @Author 王宝凯
@@ -134,7 +123,6 @@ public class PageController {
     public  String ChangePassword(){
         return "user/ChangePassword";
     }
-
     /**
      * @Description 业主信息界面
      * @Author 王宝凯
@@ -144,7 +132,6 @@ public class PageController {
     public String ownerList(){
         return "owner/ownerList";
     }
-
     /**
      * @Description 租户信息界面
      * @Author 王宝凯
@@ -154,7 +141,6 @@ public class PageController {
     public String tenantList(){
         return "tenant/tenantList";
     }
-
     /**
      * @Description 管理员信息界面
      * @Author 王宝凯
@@ -164,7 +150,6 @@ public class PageController {
     public String adminList(){
         return "admin/adminList";
     }
-
     /**
      * @Description 用户的编辑页面
      * @Author 王宝凯
@@ -174,7 +159,6 @@ public class PageController {
     public String editOperation(){
         return "userPublicOperation/editOperation";
     }
-
     /**
      * @Description 用户的添加页面
      * @Author 王宝凯
@@ -184,7 +168,6 @@ public class PageController {
     public String addOperation(){
         return "userPublicOperation/addOperation";
     }
-
     /**
      * @Description 用户的房屋信息
      * @Author 王宝凯
@@ -194,7 +177,15 @@ public class PageController {
     public String buildInfo(){
         return "userPublicOperation/buildInfo";
     }
-
+    /**
+     * @Description 用户对应的公共缴费操作
+     * @Author 王宝凯
+     * @Date 2020/4/11
+     **/
+    @GetMapping("/costInfo")
+    public String costInfo(){
+        return "userPublicOperation/costInfo";
+    }
     /**
      * @Description 业主对应的家人信息界面
      * @Author 王宝凯
@@ -204,7 +195,6 @@ public class PageController {
     public String familyInfo(){
         return "owner/familyInfo";
     }
-
     /**
      * @Description 后端家人信息表
      * @Author 王宝凯
@@ -214,7 +204,6 @@ public class PageController {
     public String familyList(){
         return "family/familyList";
     }
-
     /**
      * @Description 后端家人信息的编辑页面
      * @Author 王宝凯
@@ -224,7 +213,6 @@ public class PageController {
     public String editFamilyInfo(){
         return "family/editFamilyInfo";
     }
-
     /**
      * @Description 后端家人信息的添加页面
      * @Author 王宝凯
@@ -234,5 +222,40 @@ public class PageController {
     public String addFamilyInfo(){
         return "family/addFamilyInfo";
     }
-
+    /**
+     * @Description 缴费类型页面
+     * @Author 王宝凯
+     * @Date 2020/4/12
+     **/
+    @GetMapping("/costTypes")
+    public String costTypes(){
+        return "cost/costTypes";
+    }
+    /**
+     * @Description 添加缴费类型页面
+     * @Author 王宝凯
+     * @Date 2020/4/12
+     **/
+    @GetMapping("/addCostType")
+    public String addCostType(){
+        return "cost/addCostType";
+    }
+    /**
+     * @Description 缴费管理界面
+     * @Author 王宝凯
+     * @Date 2020/4/13
+     **/
+    @GetMapping("/paymentList")
+    public String paymentList(){
+        return "payment/paymentList";
+    }
+    /**
+     * @Description 修改缴费状态
+     * @Author 王宝凯
+     * @Date 2020/4/13
+     **/
+    @GetMapping("/editPayment")
+    public String editPayment(){
+        return "payment/editPayment";
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import org.wbk.propertymanagement.entity.Building;
+import org.wbk.propertymanagement.entity.User;
 import org.wbk.propertymanagement.response.ServerResponse;
 import org.wbk.propertymanagement.service.IBuildingService;
 
@@ -90,6 +91,20 @@ public class BuildingController {
     @ResponseBody
     public ServerResponse selectBuildNumber(){
         return iBuildingService.selectBuildNumber();
+    }
+    /**
+     * @Description 根据用户身份证号和用户的手机号  查询楼房表中的楼房信息
+     * @Author 王宝凯
+     * @Date 2020/4/11
+     **/
+    @PostMapping(value = "/selectBuildInfo")
+    @ResponseBody
+    public ServerResponse selectBuildInfo(@RequestBody User userInfo){
+        Building building = iBuildingService.selectBuildInfo(userInfo.getUserCard(),userInfo.getUserPhone());
+        if (building == null){
+            return ServerResponse.sendError("找不到数据！");
+        }
+        return ServerResponse.sendSuccess(building);
     }
 
 }
