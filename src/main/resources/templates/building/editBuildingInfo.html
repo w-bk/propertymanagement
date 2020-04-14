@@ -1,26 +1,34 @@
 <!DOCTYPE html>
+<!-- 修改房屋信息操作 -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
-    <title>添加缴费类型</title>
+    <title>修改房屋信息</title>
     <link rel="stylesheet" href="/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" href="/css/login.css" media="all"/>
 </head>
 <body>
 
-<form class="layui-form" style="padding: 20px;" action="" lay-filter="addCostType">
+<form class="layui-form" style="padding: 20px;" action="" lay-filter="editBuildingInfo">
+    <!--隐藏字段id，用于提供更新需要的主键-->
+    <input type="hidden" name="id" id="id"/>
     <div class="layui-form-item">
-        <label class="layui-form-label">缴费类型</label>
+        <label class="layui-form-label">楼房号</label>
         <div class="layui-input-inline">
-            <input type="text" name="costType" lay-verify="required" class="layui-input"/>
+            <input type="text" name="buildingNumber" readonly="readonly" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">房屋描述</label>
+        <div class="layui-input-block">
+            <textarea name="remarks" class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button type="submit" class="layui-btn" lay-submit="" lay-filter="addCostType">立即提交</button>
-            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="editBuildingInfo">确认修改</button>
         </div>
     </div>
 </form>
@@ -33,14 +41,14 @@
         var $ = layui.$;
         var index = parent.layer.getFrameIndex(window.name);
         //监听提交
-        form.on('submit(addCostType)', function(data){
+        form.on('submit(editBuildingInfo)', function(data){
             //获取要提交的数据
-            /*layer.alert(JSON.stringify(data.field), {
+           /* layer.alert(JSON.stringify(data.field), {
             });*/
             var field = data.field;
             $.ajax({
                 type:"POST"
-                ,url:'/cost/addCostType'
+                ,url:'/building/editBuildingInfo'
                 ,data: JSON.stringify(field) //提交的数据，并转成json格式
                 ,contentType:"application/json"
                 ,dataType: "json"//返回的数据类型格式
@@ -59,6 +67,28 @@
             return false;
         });
     });
+    function editBuildingInfo(obj) {
+        var buildingId = obj;
+        laythis.$.ajax({
+            url:'/building/selectByIdBuildInfo?buildingId=' + buildingId
+            ,contentType:"application/json"
+            ,dataType: "json"//返回的数据类型格式
+            ,success:function(map){
+                if (map.success){
+                    var data = map.data;
+                    /*console.log(data);*/
+                    //给表单赋值
+                    laythis.form.val("editBuildingInfo", {
+                        "id": data.id  // "name": "value"
+                        ,"buildingNumber": data.buildingNumber
+                        ,"remarks": data.remarks
+                    });
+                }else {
+                    layer.msg(map.msg,{icon:5});
+                }
+            }
+        });
+    }
 </script>
 
 </body>

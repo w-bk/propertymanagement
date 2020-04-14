@@ -125,7 +125,7 @@
                 });
             }
         };
-        //点击搜索按钮根据公告标题进行模糊查询
+        //点击搜索按钮根据缴费类型进行模糊查询
         $('#costTypeSearch').on('click', function(){
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';

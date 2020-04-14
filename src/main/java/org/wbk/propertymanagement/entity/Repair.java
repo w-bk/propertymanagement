@@ -47,7 +47,7 @@ public class Repair implements Serializable {
     private String repairLocations;
 
     /**
-     * 0未处理1已处理
+     * 0未维修1已维修
      */
     @TableField("repair_state")
     private Integer repairState;

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<!-- 房屋信息列表 -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>房屋信息列表</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/login.css" media="all"/>
+</head>
+<body>
+<!-- 搜索和整体框架布局 -->
+<div class="demoTable layui-form" style="padding: 20px;">
+    房间状态：
+    <div class="layui-input-inline">
+        <select id="buildingStatus" lay-verify="">
+            <option value="">请选择房间状态</option>
+            <option value="0">未入住</option>
+            <option value="1">已入住</option>
+        </select>
+    </div>
+    <button class="layui-btn icon-btn" data-type="reload" id="buildingSearch">搜索</button>
+    <table class="layui-hide" id="buildingList" lay-filter="buildingList"></table>
+</div>
+<script type="text/html" id="switchBuildingStatus">
+    <input type="checkbox" name="buildingStatus" value="{{d.buildingStatus}}" lay-skin="switch" lay-text="已入住|未入住"
+           lay-filter="buildingStatus" disabled {{ d.buildingStatus == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="switchIdel">
+    <input type="checkbox" name="idel" value="{{d.idel}}" lay-skin="switch" lay-text="使用中|停用中"
+           lay-filter="idel" disabled {{ d.idel == 1 ? '' : 'checked' }}>
+</script>
+<!--头部工具按钮-->
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">
+            <i class="layui-icon">&#xe608;</i> 添&emsp;加
+        </button>
+    </div>
+</script>
+<!--行工具按钮-->
+<script type="text/html" id="operate">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="enable" >启用</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="stop" >停用</a>
+</script>
+
+<script type="text/javascript" src="/layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['table', 'layer', 'form','jquery'], function(){
+        var form = layui.form;
+        var table = layui.table;
+        var layer = layui.layer;
+        table.render({
+            elem: '#buildingList'
+            ,url: '/building/buildingList' //数据接口
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,even: true //开启隔行背景
+            ,page: true //开启分页
+            ,cols: [
+                [
+                    {field:'number', title: '编号',type:'numbers',width: 60,unresize: true,align: 'center'}
+                    ,{field:'buildingNumber', title: '楼房号',width: 150,unresize: true,align: 'center'}
+                    ,{field:'buildingSize', title: '房屋面积',width: 150,unresize: true,align: 'center'}
+                    ,{field:'buildingStatus', title: '房屋入住状态',width: 170,templet: '#switchBuildingStatus',unresize: true,align: 'center'}
+                    ,{field:'remarks', title: '房屋描述',width: 260,unresize: true,align: 'center'}
+                    ,{field:'idel', title: '房屋使用状态',width: 170,templet: '#switchIdel',unresize: true,align: 'center'}
+                    ,{fixed: 'right', title:'操作', toolbar: '#operate',unresize: true,width: 300,align: 'center'}
+                ]
+            ]
+            ,id:'buildingReload'
+        });
+        //监听行工具事件
+        table.on('tool(buildingList)', function(obj){
+            var data = obj.data;//获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            //console.log(obj)
+            switch (layEvent) {
+                case 'enable':
+                    if (data.idel == 0 || data.buildingStatus == 1){
+                        layer.msg("不可操作！");
+                    } else {
+                        layer.confirm('真的启用该房屋吗？', function(index){
+                            //向服务端发送删除指令
+                            $.ajax({
+                                url:'/building/enableBuildingInfo?id=' + data.id,
+                                contentType:"application/json",
+                                dataType: "json",//返回的数据类型格式
+                                success:function(map){
+                                    if (map.success){
+                                        layer.msg(map.msg,{icon:1,time: 1000});
+                                        table.reload('buildingReload', {
+                                            page: {
+                                                curr: 1 //重新从第 1 页开始
+                                            }
+                                        });
+                                    }else {
+                                        layer.msg(map.msg,{icon:5,time: 1000});
+                                    }
+                                }
+                            });
+                        });
+                    }
+                    break;
+                case 'stop':
+                    if (data.idel == 1 || data.buildingStatus == 1){
+                        layer.msg("不可操作！");
+                    } else {
+                        layer.confirm('真的停用该房屋吗？', function(index){
+                            //向服务端发送删除指令
+                            $.ajax({
+                                url:'/building/stopBuildingInfo?id=' + data.id,
+                                contentType:"application/json",
+                                dataType: "json",//返回的数据类型格式
+                                success:function(map){
+                                    if (map.success){
+                                        layer.msg(map.msg,{icon:1,time: 1000});
+                                        table.reload('buildingReload', {
+                                            page: {
+                                                curr: 1 //重新从第 1 页开始
+                                            }
+                                        });
+                                    }else {
+                                        layer.msg(map.msg,{icon:5,time: 1000});
+                                    }
+                                }
+                            });
+                        });
+                    }
+                    break;
+                case 'edit':
+                    if (data.idel == 1){
+                        layer.msg("不可操作！");
+                    }else {
+                        layer.open({
+                            type: 2,
+                            title: '编辑页面',
+                            fixed: false, //不固定
+                            area: ['45%', '65%'],
+                            offset: '30px',  //坐标
+                            skin: 'layui-layer-rim',//加上边框
+                            maxmin: true,//开启最大化最小化按钮
+                            shadeClose: true,//点击阴影处可关闭
+                            shade: 0.3,//背景灰度
+                            content:'editBuildingInfo',//打开的弹出层名字
+                            success:function (layero,index) {
+                                // 向子页面传递参数
+                                var iframeWin = window[layero.find('iframe')[0]['name']];
+                                iframeWin.editBuildingInfo(data.id);
+                            },
+                            end:function () {
+                                table.reload('buildingReload', {
+                                    page: {
+                                        curr: 1 //重新从第 1 页开始
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    break;
+            }
+        });
+        // 监听头部工具栏
+        table.on('toolbar(buildingList)', function (obj) {
+            switch (obj.event) {
+                case 'add':
+                    layer.open({
+                        type: 2,
+                        title: '添加页面',
+                        fixed: false, //不固定
+                        area: ['65%', '80%'],
+                        skin: 'layui-layer-rim',//加上边框
+                        maxmin: true,//开启最大化最小化按钮
+                        shadeClose: true,//点击阴影处可关闭
+                        shade: 0.3,//背景灰度
+                        content:'addBuildingInfo',//打开的弹出层名字
+                        end:function () {
+                            table.reload('buildingReload', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                            });
+                        }
+                    });
+                    break;
+            }
+        });
+        //数据表格的重载
+        var $ = layui.$, active = {
+            reload: function(){
+                var buildingStatus = $('#buildingStatus');
+                //执行重载
+                table.reload('buildingReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    //根据条件进行查询
+                    ,where: {
+                        buildingStatus: buildingStatus.val()
+                    }
+                });
+            }
+        };
+        //点击搜索按钮根据房间状态进行查询
+        $('#buildingSearch').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+
+</script>
+
+</body>
+</html>

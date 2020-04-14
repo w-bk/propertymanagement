@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!-- 用户房屋信息列表 -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户房屋信息列表</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/login.css" media="all"/>
+</head>
+<body>
+<div class="demoTable layui-form" style="padding: 20px;">
+    <table class="layui-hide" id="userBuildingList" lay-filter="userBuildingList"></table>
+</div>
+
+<script type="text/javascript" src="/layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['table', 'layer', 'form','jquery'], function(){
+        var form = layui.form;
+        var table = layui.table;
+        var layer = layui.layer;
+        table.render({
+            elem: '#userBuildingList'
+            ,url: '/building/userBuildingList' //数据接口
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,even: true //开启隔行背景
+            ,page: true //开启分页
+            ,cols: [
+                [
+                    {field:'buildingNumber', title: '楼房号',unresize: true,align: 'center'}
+                    ,{field:'buildingSize', title: '房屋面积',unresize: true,align: 'center'}
+                    ,{field:'remarks', title: '房屋描述',unresize: true,align: 'center'}
+                    ,{field:'leaseTime', title: '入住时间',unresize: true,align: 'center'}
+                    ,{field:'dueTime', title: '到期时间',unresize: true,align: 'center'}
+                ]
+            ]
+        });
+    });
+
+</script>
+
+</body>
+</html>

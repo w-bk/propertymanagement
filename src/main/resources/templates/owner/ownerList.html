@@ -241,7 +241,7 @@
                 });
             }
         };
-        //点击搜索按钮根据公告标题进行模糊查询
+        //点击搜索按钮根据业主身份证号进行查询
         $('#ownerSearch').on('click', function(){
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';

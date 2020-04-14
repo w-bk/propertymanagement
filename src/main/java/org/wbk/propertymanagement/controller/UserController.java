@@ -21,7 +21,6 @@ import org.wbk.propertymanagement.service.IUserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -244,7 +243,6 @@ public class UserController extends BaseController{
         map.put("data",adminList.getRecords());//返回的数据
         return map;
     }
-
 
     /**
      * @Description 根据用户传过来的id 删除信息

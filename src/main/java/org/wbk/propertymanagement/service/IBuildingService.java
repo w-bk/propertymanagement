@@ -72,4 +72,46 @@ public interface IBuildingService extends IService<Building> {
      * @Date 2020/4/9
      **/
     ServerResponse selectBuildNumber();
+
+    /**
+     * @Description 显示房屋列表信息 根据房屋状态进行搜索查询
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    IPage<Building> buildingList(Integer page, Integer limit, Integer buildingStatus);
+
+    /**
+     * @Description 停用房屋操作  修改房屋的使用状态
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    ServerResponse stopBuildingInfo(Integer id);
+
+    /**
+     * @Description 启用房屋操作  修改房屋的使用状态
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    ServerResponse enableBuildingInfo(Integer id);
+
+    /**
+     * @Description 编辑房屋操作
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    ServerResponse editBuildingInfo(Building buildingInfo);
+
+    /**
+     * @Description 添加房屋操作
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    ServerResponse addBuildingInfo(Building buildingInfo);
+
+    /**
+     * @Description 查找用户房屋信息
+     * @Author 王宝凯
+     * @Date 2020/4/15
+     **/
+    IPage<Building> userBuildingList(Integer page, Integer limit, String userPhone);
 }

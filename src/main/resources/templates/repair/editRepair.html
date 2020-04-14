@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!-- 修改缴费状态 -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>修改维修状态</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/css/login.css" media="all"/>
+</head>
+<body>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>修改维修状态</legend>
+</fieldset>
+
+<form class="layui-form" action="" lay-filter="editRepair">
+    <!--隐藏字段id，用于提供更新需要的主键-->
+    <input type="hidden" name="id" id="id"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">报修人</label>
+        <div class="layui-input-inline">
+            <input type="text" name="userName" readonly="readonly" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">报修人电话</label>
+        <div class="layui-input-inline">
+            <input type="text" name="userPhone" readonly="readonly" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">维修内容</label>
+        <div class="layui-input-inline">
+            <input type="text" name="repairLocations" readonly="readonly" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">处理结果</label>
+        <div class="layui-input-inline">
+            <input type="text" name="processResult" class="layui-input"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">维修状态</label>
+        <div class="layui-input-inline">
+            <select id="select" name="repairState" lay-filter="repairState">
+                <option value="0">未维修</option>
+                <option value="1">已维修</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="editRepair">确认修改</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script>
+    var laythis = layui.use(['form','layer','jquery'], function(){
+        var form = layui.form;
+        var layer = layui.layer;
+        var $ = layui.$;
+        var index = parent.layer.getFrameIndex(window.name);
+        //监听提交
+        form.on('submit(editRepair)', function(data){
+            //获取要提交的数据
+            /* layer.alert(JSON.stringify(data.field), {
+             });*/
+            var field = data.field;
+            $.ajax({
+                type:"post"
+                ,url:'/repair/editRepairInfo'
+                ,data: JSON.stringify(field) //提交的数据，并转成json格式
+                ,contentType:"application/json"
+                ,dataType: "json"//返回的数据类型格式
+                /*,async:false //将ajax的异步改为同步*/
+                ,success:function (map) {
+                    if (map.success){
+                        //向父页面传值
+                        parent.layer.msg(map.msg,{icon:1,time: 1000});
+                        //关闭
+                        parent.layer.close(index);
+                    }else {
+                        //向父页面传值
+                        parent.layer.msg(map.msg,{icon:5,time: 1000});
+
+                    }
+                }
+            });
+            return false;
+        });
+    });
+
+    //获取父页面传过来的参数 并查询出修改的数据 给页面赋值
+    function editRepair(obj){
+        /*alert(obj);*/
+        var data = obj;
+        //laythis为了引用js
+        laythis.$.ajax({
+            type:"post"
+            ,url:'/repair/repairInfoSelectById'
+            ,contentType:"application/json"
+            ,data: JSON.stringify(data) //提交的数据，并转成json格式
+            ,dataType: "json"//返回的数据类型格式
+            ,success:function(map){
+                if (map.success){
+                    var data = map.data;
+                    /*console.log(data);*/
+                    //给表单赋值
+                    laythis.form.val("editRepair", {
+                        "id": data.id // "name": "value"
+                        ,"userName": data.userName
+                        ,"userPhone": data.userPhone
+                        ,"repairLocations": data.repairLocations
+                        ,"repairState": data.repairState
+                    });
+                }else {
+                    parent.layer.msg(map.msg,{icon:5,time: 1000});
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

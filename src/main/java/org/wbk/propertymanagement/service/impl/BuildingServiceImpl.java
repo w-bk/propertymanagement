@@ -2,6 +2,7 @@ package org.wbk.propertymanagement.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wbk.propertymanagement.entity.Building;
@@ -123,10 +124,112 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingMapper, Building> i
      **/
     @Override
     public ServerResponse selectBuildNumber() {
-        List<Building> selectList = buildingMapper.selectList(new QueryWrapper<Building>().eq("building_info","自住"));
+        List<Building> selectList = buildingMapper.selectList(new QueryWrapper<Building>()
+                .eq("building_info","自住"));
         if (selectList.isEmpty()){
             return ServerResponse.sendError("找不到数据！");
         }
         return ServerResponse.sendSuccess(selectList);
+    }
+
+    /**
+     * @Description 显示房屋列表信息 根据房屋状态进行搜索查询
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    @Override
+    public IPage<Building> buildingList(Integer page, Integer limit, Integer buildingStatus) {
+        return buildingMapper.selectPage(new Page<>(page,limit),new QueryWrapper<Building>()
+                .eq(buildingStatus != null,"building_status",buildingStatus)
+                .orderByDesc("building_status"));
+    }
+
+    /**
+     * @Description 停用房屋操作  修改房屋的使用状态
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    @Override
+    public ServerResponse stopBuildingInfo(Integer id) {
+        if (id == null){
+            return ServerResponse.sendError();
+        }
+        Building building = buildingMapper.selectById(id);
+        building.setIdel(1);
+        building.setUpdateTime(new Date());
+        int update = buildingMapper.updateById(building);
+        if (update != 1){
+            return ServerResponse.sendError("停用失败！");
+        }
+        return ServerResponse.sendSuccess("停用成功！");
+    }
+
+    /**
+     * @Description 启用房屋操作  修改房屋的使用状态
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    @Override
+    public ServerResponse enableBuildingInfo(Integer id) {
+        if (id == null){
+            return ServerResponse.sendError();
+        }
+        Building buildingInfo = buildingMapper.selectById(id);
+        buildingInfo.setIdel(0);
+        buildingInfo.setUpdateTime(new Date());
+        int update = buildingMapper.updateById(buildingInfo);
+        if (update != 1){
+            return ServerResponse.sendError("启用失败！");
+        }
+        return ServerResponse.sendSuccess("启用成功！");
+    }
+
+    /**
+     * @Description 编辑房屋操作
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    @Override
+    public ServerResponse editBuildingInfo(Building buildingInfo) {
+        if (buildingInfo == null){
+            return ServerResponse.sendError("修改的数据为空！");
+        }
+        buildingInfo.setUpdateTime(new Date());
+        int updateNum = buildingMapper.updateById(buildingInfo);
+        if (updateNum != 1){
+            return ServerResponse.sendError("修改失败！");
+        }
+        return ServerResponse.sendSuccess("修改成功！");
+    }
+
+    /**
+     * @Description 添加房屋操作
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    @Override
+    public ServerResponse addBuildingInfo(Building buildingInfo) {
+        if (buildingInfo == null){
+            return ServerResponse.sendError("添加的数据为空！");
+        }
+        Building building = buildingMapper.selectOne(new QueryWrapper<Building>()
+                .eq(!("").equals(buildingInfo.getBuildingNumber()) && buildingInfo.getBuildingNumber() != null,
+                        "building_number", buildingInfo.getBuildingNumber()));
+        if (building != null){
+            return ServerResponse.sendError("添加的楼房号已存在！");
+        }
+        buildingInfo.setCreateTime(new Date());
+        buildingInfo.setUpdateTime(new Date());
+        int insertNum = buildingMapper.insert(buildingInfo);
+        if (insertNum != 1){
+            return ServerResponse.sendError("添加失败！");
+        }
+        return ServerResponse.sendSuccess("添加成功！");
+    }
+
+    @Override
+    public IPage<Building> userBuildingList(Integer page, Integer limit, String userPhone) {
+        return buildingMapper.selectPage(new Page<>(page,limit),new QueryWrapper<Building>()
+                .eq(!("").equals(userPhone) && userPhone != null,"user_phone",userPhone));
     }
 }

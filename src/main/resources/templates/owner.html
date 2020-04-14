@@ -14,21 +14,20 @@
     <div class="layui-header">
         <div class="layui-logo">社区物业管理系统版权所有</div>
         <ul class="layui-nav layui-layout-right kit-nav">
-            <li class="layui-nav-item" lay-unselect="">
-                <a lay-href="app/message/index.html" layadmin-event="message" lay-text="消息中心" href="/LayuiForm">
-                    <i class="layui-icon layui-icon-notice"></i>
+            <!-- <li class="layui-nav-item" lay-unselect="">
+                 <a lay-href="app/message/index.html" layadmin-event="message" lay-text="消息中心" href="/LayuiForm">
+                     <i class="layui-icon layui-icon-notice"></i>
 
-                    <!-- 如果有新消息，则显示小圆点 -->
-                    <span class="layui-badge-dot"></span>
-                </a>
-            </li>
+                     &lt;!&ndash; 如果有新消息，则显示小圆点 &ndash;&gt;
+                     <span class="layui-badge-dot"></span>
+                 </a>
+             </li>-->
             <li class="layui-nav-item">
                 <a href="javascript:;">
                     <img class="layui-nav-img" th:src="${(session.userInformation.avatar != null && !#strings.isEmpty(session.userInformation.avatar)) ? '/upload/'+session.userInformation.avatar : '/images/face.jpg'}"/>
-                    <!--<img class="layui-nav-img"  src="/images/face.jpg" >-->
                 </a>
                 <dl class="layui-nav-child">
-                    <dd><a href="/user/userInforMation" id="info">基本资料</a></dd>
+                    <dd><a href="javascript:;" id="info">基本资料</a></dd>
                     <dd><a href="/">注销</a></dd>
                 </dl>
             </li>
@@ -50,18 +49,41 @@
                             <a href="javascript:;" kit-target data-options="{url:'/notice/noticeInfo',icon:'&#xe770;',title:'公告',id:'2'}">
                                 <i class="layui-icon">&#xe770;</i><span>公告</span></a>
                         </dd>
-                        <!--<dd>
-                            <a href="javascript:;" kit-target data-options="{url:'/home/user/list',icon:'&#xe770;',title:'User 用户',id:'3'}">
-                                <i class="layui-icon">&#xe770;</i><span>User 用户</span></a>
-                        </dd>-->
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;"><span>组件菜单</span></a>
+                    <a href="javascript:;"><span>房屋系统</span></a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;" kit-target data-options="{url:'/LayuiForm',icon:'&#xe770;',title:'LayuiForm',id:'3'}">
-                                <i class="layui-icon">&#xe770;</i><span>LayuiForm</span></a>
+                            <a href="javascript:;" kit-target data-options="{url:'/userBuildingList',icon:'&#xe60a;',title:'房屋信息',id:'3'}">
+                                <i class="layui-icon">&#xe60a;</i><span>房屋信息</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><span>家人管理</span></a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="javascript:;" kit-target data-options="{url:'/familyList',icon:'&#xe770;',title:'家人信息',id:'4'}">
+                                <i class="layui-icon">&#xe770;</i><span>家人信息</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><span>缴费系统</span></a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="javascript:;" kit-target data-options="{url:'/paymentList',icon:'&#xe663;',title:'缴费管理',id:'5'}">
+                                <i class="layui-icon">&#xe663;</i><span>缴费管理</span></a>
+                        </dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;"><span>维修系统</span></a>
+                    <dl class="layui-nav-child">
+                        <dd>
+                            <a href="javascript:;" kit-target data-options="{url:'/repairList',icon:'&#xe653;',title:'维修管理',id:'6'}">
+                                <i class="layui-icon">&#xe653;</i><span>维修管理</span></a>
                         </dd>
                     </dl>
                 </li>
@@ -69,11 +91,11 @@
                     <a href="javascript:;"><span>我的设置</span></a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;" kit-target data-options="{url:'/user/userInforMation',icon:'&#xe770;',title:'修改信息',id:'4'}">
+                            <a href="javascript:;" kit-target data-options="{url:'/user/userInforMation',icon:'&#xe770;',title:'修改信息',id:'7'}">
                                 <i class="layui-icon">&#xe770;</i><span>修改信息</span></a>
                         </dd>
                         <dd>
-                            <a href="javascript:;" kit-target data-options="{url:'/ChangePassword',icon:'&#xe673;',title:'修改密码',id:'5'}">
+                            <a href="javascript:;" kit-target data-options="{url:'/ChangePassword',icon:'&#xe673;',title:'修改密码',id:'8'}">
                                 <i class="layui-icon">&#xe673;</i><span>修改密码</span></a>
                         </dd>
                     </dl>
@@ -99,9 +121,10 @@
     var message;
     layui.config({
         base: './js/'
-    }).use(['app', 'message'], function() {
+    }).use(['app', 'message','tab','jquery'], function() {
         var app = layui.app,
             $ = layui.jquery,
+            tab = layui.tab,
             layer = layui.layer;
         //将message设置为全局以便子页面调用
         message = layui.message;
@@ -112,8 +135,8 @@
         $('#info').on('click',function () {
             tab.tabAdd({
                 icon: "",
-                id: "4",
-                title: "基本资料",
+                id: "7",
+                title: "修改信息",
                 url: "/user/userInforMation"
             });
         });

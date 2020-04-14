@@ -10,6 +10,7 @@ import org.wbk.propertymanagement.entity.User;
 import org.wbk.propertymanagement.response.ServerResponse;
 import org.wbk.propertymanagement.service.IBuildingService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/building")
-public class BuildingController {
+public class BuildingController extends BaseController {
 
     @Autowired
     private IBuildingService iBuildingService;
@@ -68,7 +69,7 @@ public class BuildingController {
     }
 
     /**
-     * @Description 根据前端传过来的楼层表的id查询楼层号
+     * @Description 根据前端传过来的楼层表的id查询楼层信息（楼房号）
      * @Author 王宝凯
      * @Date 2020/4/1
      **/
@@ -105,6 +106,85 @@ public class BuildingController {
             return ServerResponse.sendError("找不到数据！");
         }
         return ServerResponse.sendSuccess(building);
+    }
+
+    /**
+     * @Description 显示房屋列表信息 根据房屋状态进行搜索查询
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    @GetMapping(value = "/buildingList")
+    @ResponseBody
+    public Map buildingList(Integer page,Integer limit,Integer buildingStatus){
+        Map<String,Object> map = new HashMap<>();
+        IPage<Building> buildingList = iBuildingService.buildingList(page,limit,buildingStatus);
+        map.put("code",0);//分页返回的数据规范，正确的成功状态码应为："code": 0
+        map.put("msg","");
+        map.put("count",buildingList.getTotal());//总条数
+        map.put("data",buildingList.getRecords());//返回的数据
+        return map;
+    }
+
+    /**
+     * @Description 停用房屋操作  修改房屋的使用状态
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    @GetMapping(value = "/stopBuildingInfo")
+    @ResponseBody
+    public ServerResponse stopBuildingInfo(@RequestParam Integer id){
+        return iBuildingService.stopBuildingInfo(id);
+    }
+
+    /**
+     * @Description 启用房屋操作  修改房屋的使用状态
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    @GetMapping(value = "/enableBuildingInfo")
+    @ResponseBody
+    public ServerResponse enableBuildingInfo(@RequestParam Integer id){
+        return iBuildingService.enableBuildingInfo(id);
+    }
+
+    /**
+     * @Description 编辑房屋操作
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    @PostMapping(value = "/editBuildingInfo")
+    @ResponseBody
+    public ServerResponse editBuildingInfo(@RequestBody Building buildingInfo){
+        return iBuildingService.editBuildingInfo(buildingInfo);
+    }
+
+    /**
+     * @Description 添加房屋操作
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    @PostMapping(value = "/addBuildingInfo")
+    @ResponseBody
+    public ServerResponse addBuildingInfo(@RequestBody Building buildingInfo){
+        return iBuildingService.addBuildingInfo(buildingInfo);
+    }
+
+    /**
+     * @Description 查找用户房屋信息
+     * @Author 王宝凯
+     * @Date 2020/4/15
+     **/
+    @GetMapping(value = "/userBuildingList")
+    @ResponseBody
+    public Map userBuildingList(Integer page, Integer limit, HttpServletRequest request){
+        Map<String,Object> map = new HashMap<>();
+        User  user = getUser(request);
+        IPage<Building> userBuildingList = iBuildingService.userBuildingList(page,limit,user.getUserPhone());
+        map.put("code",0);
+        map.put("msg","");
+        map.put("count",userBuildingList.getTotal()); //总数
+        map.put("data",userBuildingList.getRecords()); //数据
+        return map;
     }
 
 }

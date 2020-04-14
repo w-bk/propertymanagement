@@ -258,4 +258,59 @@ public class PageController {
     public String editPayment(){
         return "payment/editPayment";
     }
+    /**
+     * @Description 房屋管理列表
+     * @Author 王宝凯
+     * @Date 2020/4/13
+     **/
+    @GetMapping("/buildingList")
+    public String buildingList(){
+        return "building/buildingList";
+    }
+    /**
+     * @Description 修改房屋信息页面
+     * @Author 王宝凯
+     * @Date 2020/4/13
+     **/
+    @GetMapping("/editBuildingInfo")
+    public String editBuildingInfo(){
+        return "building/editBuildingInfo";
+    }
+    /**
+     * @Description 添加房屋信息页面
+     * @Author 王宝凯
+     * @Date 2020/4/13
+     **/
+    @GetMapping("/addBuildingInfo")
+    public String addBuildingInfo(){
+        return "building/addBuildingInfo";
+    }
+    /**
+     * @Description 维修管理页面
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    @GetMapping("/repairList")
+    public String repairList(){
+        return "repair/repairList";
+    }
+    /**
+     * @Description 修改维修状态页面
+     * @Author 王宝凯
+     * @Date 2020/4/14
+     **/
+    @GetMapping("/editRepair")
+    public String editRepair(){
+        return "repair/editRepair";
+    }
+    /**
+     * @Description 用户房屋信息页面
+     * @Author 王宝凯
+     * @Date 2020/4/15
+     **/
+    @GetMapping("/userBuildingList")
+    public String userBuildingList(){
+        return "building/userBuildingList";
+    }
+
 }
