@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!-- 用户缴费信息页面 -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>缴费信息</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/login.css" media="all"/>
+</head>
+<body>
+<!-- 搜索和整体框架布局 -->
+<div class="demoTable layui-form" style="padding: 20px;">
+    缴费状态：
+    <div class="layui-input-inline">
+        <select id="status" lay-verify="">
+            <option value="">请选择缴费状态</option>
+            <option value="0">未缴费</option>
+            <option value="1">已缴费</option>
+        </select>
+    </div>
+    <button class="layui-btn icon-btn" data-type="reload" id="statusSearch">搜索</button>
+    <table class="layui-hide" id="userPaymentList" lay-filter="userPaymentList"></table>
+</div>
+
+<script type="text/html" id="switchstatus">
+    <input type="checkbox" name="status" value="{{d.status}}" lay-skin="switch" lay-text="已缴费|未缴费"
+           lay-filter="status" disabled {{ d.status == 1 ? 'checked' : '' }}>
+</script>
+
+<script type="text/javascript" src="/layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['table', 'layer', 'form','jquery'], function(){
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var layer = layui.layer;
+        table.render({
+            elem: '#userPaymentList'
+            ,url: '/paymentInfo/userPaymentList' //数据接口
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,even: true //开启隔行背景
+            ,page: true //开启分页
+            ,cols: [
+                [
+                    //unresize: true 不可拖拽
+                    {field:'number', title: '编号',type:'numbers',unresize: true,align: 'center'}
+                    ,{field:'buildingNumber', title: '楼房号',unresize: true,align: 'center'}
+                    ,{field:'costType', title: '缴费类型',unresize: true,align: 'center'}
+                    ,{field:'money', title: '缴费金额',unresize: true,align: 'center'}
+                    ,{field:'status', title: '缴费状态',templet: '#switchstatus',unresize: true,align: 'center'}
+                    ,{field:'paymentTime', title: '缴费日期',templet: function(d){
+                        if (d.paymentTime == null)
+                        {
+                            return "";
+                        }
+                        return util.toDateString(d.paymentTime, 'yyyy-MM-dd ');}
+                        ,unresize: true,align: 'center'}
+                ]
+            ]
+            ,id:'userPaymentReload'
+        });
+        //数据表格的重载
+        var $ = layui.$, active = {
+            reload: function(){
+                var status = $('#status');
+                //执行重载
+                table.reload('userPaymentReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    //根据条件进行查询
+                    ,where: {
+                        status: status.val()
+                    }
+                });
+            }
+        };
+        //点击搜索按钮根据缴费状态进行查询
+        $('#statusSearch').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+
+</script>
+
+</body>
+</html>

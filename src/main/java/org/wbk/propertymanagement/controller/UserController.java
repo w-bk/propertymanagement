@@ -301,7 +301,7 @@ public class UserController extends BaseController{
         request.getSession().setAttribute("editUserInfo",userInfo);
         //根据用户身份证号和用户的手机号  查询楼房表中的楼房信息
         Building buildInfo = iBuildingService.selectBuildInfo(userInfo.getUserCard(),userInfo.getUserPhone());
-        request.getSession().setAttribute("buildInfomation",buildInfo);
+        request.getSession().setAttribute("buildInfo",buildInfo);
      /* System.out.println(buildInfo);
         System.out.println(buildInfo.getId());*/
         if (userInfo != null && buildInfo != null){
@@ -325,7 +325,7 @@ public class UserController extends BaseController{
     public Map editUserInfo(@RequestBody User userInfo,HttpServletRequest request){
         Map<String,Object> map = new HashMap<>();
         User editUser = editUser(request);
-        System.out.println(editUser);
+        /*System.out.println(editUser);*/
         if(!(editUser.getUserPhone()).equals(userInfo.getUserPhone())){
             User user = iUserService.selectUserPhone(userInfo.getUserPhone());
             if (user != null){
@@ -351,13 +351,8 @@ public class UserController extends BaseController{
         buildingInfo.setLeaseTime(oldBuildInfo.getLeaseTime());
         buildingInfo.setDueTime(oldBuildInfo.getDueTime());
         buildingInfo.setUpdateTime(new Date());
-        /*System.out.println("oldBuildInfo"+oldBuildInfo);
-        System.out.println("buildingInfo"+buildingInfo);*/
-        /*System.out.println("buildingNumber"+buildingNumber);*/
         //根据用户id获取用户信息  用来判断修改用户的权限
         User userInforMation = iUserService.userInforMation(userInfo.getId());
-        /*System.out.println("userInforMation:"+userInforMation);
-        System.out.println(userInforMation.getStatus());*/
         int editFamilyNum = 0;
         if (userInforMation.getStatus() == 1){
             //获取到业主身份证号
@@ -459,5 +454,20 @@ public class UserController extends BaseController{
             map.put("msg","添加失败！");
         }
         return map;
+    }
+
+    /**
+     * @Description 获取当前登录的用户信息 用来进行维修信息的赋值
+     * @Author 王宝凯
+     * @Date 2020/4/15
+     **/
+    @GetMapping(value = "/getUserInfo")
+    @ResponseBody
+    public ServerResponse getUserInfo(HttpServletRequest request){
+        User userInfo = getUser(request);
+        if (userInfo == null){
+            return ServerResponse.sendError("数据出错！");
+        }
+        return ServerResponse.sendSuccess(userInfo);
     }
 }

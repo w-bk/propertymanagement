@@ -312,5 +312,51 @@ public class PageController {
     public String userBuildingList(){
         return "building/userBuildingList";
     }
+    /**
+     * @Description 业主界面的家人信息的显示
+     * @Author 王宝凯
+     * @Date 2020/4/15
+     **/
+    @GetMapping("/ownerFamilyList")
+    public String ownerFamilyList(){
+        return "family/ownerFamilyList";
+    }
+    /**
+     * @Description 用户查看缴费信息界面
+     * @Author 王宝凯
+     * @Date 2020/4/15
+     **/
+    @GetMapping("/userPaymentList")
+    public String userPaymentList(){
+        return "payment/userPaymentList";
+    }
+    /**
+     * @Description 用户维修页面
+     * @Author 王宝凯
+     * @Date 2020/4/15
+     **/
+    @GetMapping("/userRepairList")
+    public String userRepairList(){
+        return "repair/userRepairList";
+    }
+    /**
+     * @Description 添加维修页面
+     * @Author 王宝凯
+     * @Date 2020/4/15
+     **/
+    @GetMapping("/addRepair")
+    public String addRepair(){
+        return "repair/addRepair";
+    }
+    /**
+     * @Description 用户修改页面
+     * @Author 王宝凯
+     * @Date 2020/4/15
+     **/
+    @GetMapping("/userEditRepair")
+    public String userEditRepair(){
+        return "repair/userEditRepair";
+    }
+
 
 }

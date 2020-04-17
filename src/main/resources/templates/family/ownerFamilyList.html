@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 业主家人信息表 -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>家人信息</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all"/>
+    <link rel="stylesheet" href="/css/login.css" media="all"/>
+</head>
+
+<body>
+<div class="demoTable layui-form" style="padding: 20px;">
+    <table class="layui-hide" id="ownerFamilyList" lay-filter="ownerFamilyList"></table>
+</div>
+<script type="text/javascript" src="/layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['table', 'layer', 'form','jquery'], function(){
+        var form = layui.form
+            ,table = layui.table
+            ,layer = layui.layer;
+        table.render({
+            elem: '#ownerFamilyList'
+            ,url: '/family/familyList' //数据接口
+            ,even: true //开启隔行背景
+            ,page: true //开启分页
+            ,cols: [
+                [
+                    {field:'number', title: '编号',type:'numbers', align: 'center'}
+                    ,{field:'buildingNumber', title: '楼房号',align: 'center'}
+                    ,{field:'familyName', title: '家人姓名',align: 'center'}
+                    ,{field:'familySex', title: '性别',align: 'center'}
+                    ,{field:'familyPhone', title: '电话号码',align: 'center'}
+                    ,{field:'familyCard', title: '身份证号',align: 'center'}
+                ]
+            ]
+        });
+    });
+</script>
+</body>
+</html>

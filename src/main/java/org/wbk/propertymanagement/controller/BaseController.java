@@ -50,7 +50,7 @@ public class BaseController {
      * @Author 王宝凯
      * @Date 2020/4/5
      */
-    public Building getBuilding(HttpServletRequest request){
+    public Building getBuildInfo(HttpServletRequest request){
         Object object = request.getSession().getAttribute("buildInfomation");
         if(object == null){
             return null;
@@ -59,5 +59,18 @@ public class BaseController {
         return building;
     }
 
+    /**
+     * @Description: 在session中获取当前楼层信息
+     * @Author 王宝凯
+     * @Date 2020/4/5
+     */
+    public Building getBuilding(HttpServletRequest request){
+        Object object = request.getSession().getAttribute("buildInfo");
+        if(object == null){
+            return null;
+        }
+        Building building = (Building)object;
+        return building;
+    }
 
 }

@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import org.wbk.propertymanagement.entity.Family;
+import org.wbk.propertymanagement.entity.User;
 import org.wbk.propertymanagement.response.ServerResponse;
 import org.wbk.propertymanagement.service.IFamilyService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +27,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/family")
-public class FamilyController {
+public class FamilyController extends BaseController {
     @Autowired
     private IFamilyService iFamilyService;
 
@@ -53,9 +55,15 @@ public class FamilyController {
      **/
     @GetMapping(value = "/familyList")
     @ResponseBody
-    public Map familyList(Integer page,Integer limit,String ownerCard){
+    public Map familyList(Integer page,Integer limit,String ownerCard, HttpServletRequest request){
         Map<String,Object> map = new HashMap<>();
-        IPage<Family> familyList = iFamilyService.familyList(page,limit,ownerCard);
+        User user = getUser(request);
+        IPage<Family> familyList = null;
+        if (user.getStatus() == 0){
+            familyList = iFamilyService.familyList(page,limit,ownerCard);
+        }else{
+            familyList = iFamilyService.familyList(page,limit,user.getUserCard());
+        }
         map.put("code",0);
         map.put("msg","");
         map.put("count",familyList.getTotal());//总条数

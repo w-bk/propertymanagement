@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wbk.propertymanagement.entity.Building;
 import org.wbk.propertymanagement.entity.User;
+import org.wbk.propertymanagement.mapper.BuildingMapper;
 import org.wbk.propertymanagement.mapper.UserMapper;
 import org.wbk.propertymanagement.response.ServerResponse;
 import org.wbk.propertymanagement.service.IUserService;
@@ -27,6 +29,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private BuildingMapper buildingMapper;
 
     /**
      * @Description 验证登录 调用mybatisplus提供的方法，将传过来的参数作为条件，查询一条记录
@@ -51,7 +55,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if(userInfo == null){
             return ServerResponse.sendError("手机号或密码错误");
         }
+        Building buildingInfo = buildingMapper.selectOne(new QueryWrapper<Building>()
+                .eq("user_phone",user.getUserPhone()));
         request.getSession().setAttribute("userInformation",userInfo);
+        request.getSession().setAttribute("buildInfomation",buildingInfo);
         return ServerResponse.sendSuccess(userInfo);
     }
 

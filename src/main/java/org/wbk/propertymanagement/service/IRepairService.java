@@ -35,4 +35,34 @@ public interface IRepairService extends IService<Repair> {
      * @Date 2020/4/14
      **/
     ServerResponse editRepairInfo(Repair repairInfo);
+
+    /**
+     * @Description 用户查看报修的信息
+     * @Author 王宝凯
+     * @Date 2020/4/15
+     **/
+    IPage<Repair> userRepairList(Integer page, Integer limit, Integer userRepairState, String userPhone);
+
+    /**
+     * @Description 用户添加维修信息
+     * @Author 王宝凯
+     * @Date 2020/4/15
+     **/
+    ServerResponse addRepairInfo(Repair repair);
+
+    /**
+     * @Description 用户修改维修内容
+     * @Author 王宝凯
+     * @Date 2020/4/15
+     **/
+    ServerResponse userEditRepairInfo(Repair repairInfo);
+
+    /**
+     * @Description 用户删除未维修的信息
+     * @Author 王宝凯
+     * @Date 2020/4/15
+     **/
+    ServerResponse deleteRepair(Integer id);
+
+
 }

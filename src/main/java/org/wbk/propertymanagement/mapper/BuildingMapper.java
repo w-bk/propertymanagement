@@ -1,5 +1,6 @@
 package org.wbk.propertymanagement.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.wbk.propertymanagement.entity.Building;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
