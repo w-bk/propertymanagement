@@ -56,10 +56,6 @@ public class PageController {
     public String welcome(){
         return "user/welcome";
     }
-    @GetMapping("/LayuiForm")
-    public String LayuiForm(){
-        return "LayuiForm";
-    }
     /**
      * @Description 前端公告界面
      * @Author 王宝凯

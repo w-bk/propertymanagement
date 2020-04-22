@@ -14,14 +14,6 @@
     <div class="layui-header">
         <div class="layui-logo">社区物业管理系统版权所有</div>
         <ul class="layui-nav layui-layout-right kit-nav">
-           <!-- <li class="layui-nav-item" lay-unselect="">
-                <a lay-href="app/message/index.html" layadmin-event="message" lay-text="消息中心" href="/LayuiForm">
-                    <i class="layui-icon layui-icon-notice"></i>
-
-                    &lt;!&ndash; 如果有新消息，则显示小圆点 &ndash;&gt;
-                    <span class="layui-badge-dot"></span>
-                </a>
-            </li>-->
             <li class="layui-nav-item">
                 <a href="javascript:;">
                     <img class="layui-nav-img" th:src="${(session.userInformation.avatar != null && !#strings.isEmpty(session.userInformation.avatar)) ? '/upload/'+session.userInformation.avatar : '/images/face.jpg'}"/>

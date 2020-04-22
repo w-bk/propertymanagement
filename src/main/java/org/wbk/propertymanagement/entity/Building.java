@@ -83,7 +83,7 @@ public class Building implements Serializable {
     private String remarks;
 
     /**
-     * 0启用、1停用
+     * 房屋停用状态：0启用、1停用
      */
     @TableField("idel")
     private Integer idel;

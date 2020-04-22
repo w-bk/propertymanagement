@@ -23,7 +23,9 @@
 </div>
 <!--行工具按钮-->
 <script type="text/html" id="operate">
+    {{# if(d.status == '0'){}}
     <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    {{# }}}
 </script>
 
 <script type="text/html" id="switchstatus">
@@ -71,35 +73,30 @@
             //console.log(obj)
             switch (layEvent) {
                 case 'edit':
-                    //已缴费的状态 不可进行修改
-                    if (data.status == 1){
-                        layer.msg("不可操作！");
-                    } else {
-                        layer.open({
-                            type: 2,
-                            title: '修改页面',
-                            fixed: false, //不固定
-                            area: ['65%', '80%'],
-                            skin: 'layui-layer-rim',//加上边框
-                            maxmin: true,//开启最大化最小化按钮
-                            shadeClose: true,//点击阴影处可关闭
-                            shade: 0.3,//背景灰度
-                            content:'editPayment',//打开的弹出层名字
-                            success:function (layero,index) {
-                                /*console.log(data.status);*/
-                                // 向子页面传递参数
-                                var iframeWin = window[layero.find('iframe')[0]['name']];
-                                iframeWin.editPayment(data);
-                            },
-                            end:function () {
-                                table.reload('paymentReload', {
-                                    page: {
-                                        curr: 1 //重新从第 1 页开始
-                                    }
-                                });
-                            }
-                        });
-                    }
+                    layer.open({
+                        type: 2,
+                        title: '修改页面',
+                        fixed: false, //不固定
+                        area: ['65%', '80%'],
+                        skin: 'layui-layer-rim',//加上边框
+                        maxmin: true,//开启最大化最小化按钮
+                        shadeClose: true,//点击阴影处可关闭
+                        shade: 0.3,//背景灰度
+                        content:'editPayment',//打开的弹出层名字
+                        success:function (layero,index) {
+                            /*console.log(data.status);*/
+                            // 向子页面传递参数
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            iframeWin.editPayment(data);
+                        },
+                        end:function () {
+                            table.reload('paymentReload', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                            });
+                        }
+                    });
                     break;
             }
         });

@@ -40,9 +40,19 @@
 <!--行工具按钮-->
 <script type="text/html" id="operate">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    {{# if(d.idel == '1' && d.buildingStatus == '0'){}}
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="enable" >启用</a>
+    {{# }}}
+    {{# if(d.idel == '0' && d.buildingStatus == '0'){}}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="stop" >停用</a>
+    {{# }}}
+</script>
+
+<!--<script type="text/html" id="operate">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="enable" >启用</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="stop" >停用</a>
-</script>
+</script>-->
 
 <script type="text/javascript" src="/layui/layui.js" charset="utf-8"></script>
 <script>
@@ -76,7 +86,7 @@
             //console.log(obj)
             switch (layEvent) {
                 case 'enable':
-                    if (data.idel == 0 || data.buildingStatus == 1){
+                    /*if (data.idel == 0 || data.buildingStatus == 1){
                         layer.msg("不可操作！");
                     } else {
                         layer.confirm('真的启用该房屋吗？', function(index){
@@ -99,10 +109,30 @@
                                 }
                             });
                         });
-                    }
+                    }*/
+                    layer.confirm('真的启用该房屋吗？', function(index){
+                        //向服务端发送删除指令
+                        $.ajax({
+                            url:'/building/enableBuildingInfo?id=' + data.id,
+                            contentType:"application/json",
+                            dataType: "json",//返回的数据类型格式
+                            success:function(map){
+                                if (map.success){
+                                    layer.msg(map.msg,{icon:1,time: 1000});
+                                    table.reload('buildingReload', {
+                                        page: {
+                                            curr: 1 //重新从第 1 页开始
+                                        }
+                                    });
+                                }else {
+                                    layer.msg(map.msg,{icon:5,time: 1000});
+                                }
+                            }
+                        });
+                    });
                     break;
                 case 'stop':
-                    if (data.idel == 1 || data.buildingStatus == 1){
+                    /*if (data.idel == 1 || data.buildingStatus == 1){
                         layer.msg("不可操作！");
                     } else {
                         layer.confirm('真的停用该房屋吗？', function(index){
@@ -125,10 +155,30 @@
                                 }
                             });
                         });
-                    }
+                    }*/
+                    layer.confirm('真的停用该房屋吗？', function(index){
+                        //向服务端发送删除指令
+                        $.ajax({
+                            url:'/building/stopBuildingInfo?id=' + data.id,
+                            contentType:"application/json",
+                            dataType: "json",//返回的数据类型格式
+                            success:function(map){
+                                if (map.success){
+                                    layer.msg(map.msg,{icon:1,time: 1000});
+                                    table.reload('buildingReload', {
+                                        page: {
+                                            curr: 1 //重新从第 1 页开始
+                                        }
+                                    });
+                                }else {
+                                    layer.msg(map.msg,{icon:5,time: 1000});
+                                }
+                            }
+                        });
+                    });
                     break;
                 case 'edit':
-                    if (data.idel == 1){
+                   /* if (data.idel == 1){
                         layer.msg("不可操作！");
                     }else {
                         layer.open({
@@ -155,7 +205,31 @@
                                 });
                             }
                         });
-                    }
+                    }*/
+                    layer.open({
+                        type: 2,
+                        title: '编辑页面',
+                        fixed: false, //不固定
+                        area: ['45%', '65%'],
+                        offset: '30px',  //坐标
+                        skin: 'layui-layer-rim',//加上边框
+                        maxmin: true,//开启最大化最小化按钮
+                        shadeClose: true,//点击阴影处可关闭
+                        shade: 0.3,//背景灰度
+                        content:'editBuildingInfo',//打开的弹出层名字
+                        success:function (layero,index) {
+                            // 向子页面传递参数
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            iframeWin.editBuildingInfo(data.id);
+                        },
+                        end:function () {
+                            table.reload('buildingReload', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                            });
+                        }
+                    });
                     break;
             }
         });

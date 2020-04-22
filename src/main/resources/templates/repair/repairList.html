@@ -23,8 +23,14 @@
 </div>
 <!--行工具按钮-->
 <script type="text/html" id="operate">
+    {{# if(d.repairState == '0'){}}
     <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    {{# }}}
 </script>
+
+<!--<script type="text/html" id="operate">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+</script>-->
 
 <script type="text/html" id="switchRepairState">
     <input type="checkbox" name="repairState" value="{{d.repairState}}" lay-skin="switch" lay-text="已维修|未维修"
@@ -73,7 +79,7 @@
             switch (layEvent) {
                 case 'edit':
                     //已处理的状态 不可进行修改
-                    if (data.repairState == 1){
+                    /*if (data.repairState == 1){
                         layer.msg("不可操作！");
                     } else {
                         layer.open({
@@ -87,7 +93,7 @@
                             shade: 0.3,//背景灰度
                             content:'editRepair',//打开的弹出层名字
                             success:function (layero,index) {
-                                /*console.log(data.status);*/
+                                /!*console.log(data.status);*!/
                                 // 向子页面传递参数
                                 var iframeWin = window[layero.find('iframe')[0]['name']];
                                 iframeWin.editRepair(data);
@@ -100,7 +106,31 @@
                                 });
                             }
                         });
-                    }
+                    }*/
+                    layer.open({
+                        type: 2,
+                        title: '修改页面',
+                        fixed: false, //不固定
+                        area: ['65%', '80%'],
+                        skin: 'layui-layer-rim',//加上边框
+                        maxmin: true,//开启最大化最小化按钮
+                        shadeClose: true,//点击阴影处可关闭
+                        shade: 0.3,//背景灰度
+                        content:'editRepair',//打开的弹出层名字
+                        success:function (layero,index) {
+                            /*console.log(data.status);*/
+                            // 向子页面传递参数
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            iframeWin.editRepair(data);
+                        },
+                        end:function () {
+                            table.reload('repairReload', {
+                                page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                            });
+                        }
+                    });
                     break;
             }
         });
