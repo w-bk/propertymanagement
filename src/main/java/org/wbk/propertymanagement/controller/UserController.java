@@ -355,10 +355,12 @@ public class UserController extends BaseController{
         User userInforMation = iUserService.userInforMation(userInfo.getId());
         int editFamilyNum = 0;
         if (userInforMation.getStatus() == 1){
-            //获取到业主身份证号
+            //获取到业主原来的身份证号
+            String oldOwnerCard = oldBuildInfo.getUserCard();
+            //获取到业主修改的身份证号
             String ownerCard = userInfo.getUserCard();
             //更新业主对应家人表的楼房号
-            editFamilyNum = iFamilyService.editFamilyInfo(ownerCard,buildingNumber);
+            editFamilyNum = iFamilyService.editFamilyInfo(oldOwnerCard,ownerCard,buildingNumber);
         }
         userInfo.setUpdateTime(new Date());
         //将用户之前的房屋信息全部清空

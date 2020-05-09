@@ -15,7 +15,7 @@
     <div class="layui-inline">
         <input class="layui-input" placeholder="输入管理员身份证号" lay-verify="identity" id="adminCard" autocomplete="off">
     </div>
-    <button class="layui-btn icon-btn" data-type="reload" id="adminSearch">搜索</button>
+    <button class="layui-btn icon-btn" lay-submit="" data-type="reload" id="adminSearch">搜索</button>
     <table class="layui-hide" id="adminList" lay-filter="adminList"></table>
 </div>
 <!--头部工具按钮-->
@@ -191,7 +191,7 @@
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
-        //验证用户身份证号
+        //验证管理员身份证号
         form.verify({
             identity:[/(^$)|(^\d{15}$)|(^\d{17}(x|X|\d)$)/,'请输入正确的身份证号']
         });

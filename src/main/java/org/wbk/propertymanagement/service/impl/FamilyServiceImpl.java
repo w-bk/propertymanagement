@@ -37,11 +37,12 @@ public class FamilyServiceImpl extends ServiceImpl<FamilyMapper, Family> impleme
      * @Date 2020/4/3
      **/
     @Override
-    public int editFamilyInfo(String ownerCard, String buildingNumber) {
+    public int editFamilyInfo(String oldOwnerCard,String ownerCard, String buildingNumber) {
         Family familyInfo = new Family();
         //条件
         QueryWrapper<Family> editQueryWrapper = new QueryWrapper<>();
-        editQueryWrapper.eq(!("").equals(ownerCard) && ownerCard != null,"owner_card",ownerCard);
+        editQueryWrapper.eq(!("").equals(oldOwnerCard) && oldOwnerCard != null,"owner_card",oldOwnerCard);
+        familyInfo.setOwnerCard(ownerCard);
         familyInfo.setBuildingNumber(buildingNumber);
         familyInfo.setUpdateTime(new Date());
         return familyMapper.update(familyInfo,editQueryWrapper);

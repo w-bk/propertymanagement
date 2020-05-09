@@ -246,7 +246,7 @@
             var type = $(this).data('type');
             active[type] ? active[type].call(this) : '';
         });
-        //验证用户身份证号
+        //验证业主身份证号
         form.verify({
             identity:[/(^$)|(^\d{15}$)|(^\d{17}(x|X|\d)$)/,'请输入正确的身份证号']
         });

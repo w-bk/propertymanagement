@@ -22,7 +22,7 @@ public interface IFamilyService extends IService<Family> {
      * @Author 王宝凯
      * @Date 2020/4/3
      **/
-    int editFamilyInfo(String ownerCard, String buildingNumber);
+    int editFamilyInfo(String oldOwnerCard,String ownerCard, String buildingNumber);
 
     /**
      * @Description 根据业主的身份证号和楼房号 查询是否存在楼房信息
